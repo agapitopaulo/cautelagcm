@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Cautela de Armamentos — GMS</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; min-height: 100vh; }
+
+  .header { background: linear-gradient(135deg, #0C447C 0%, #185FA5 60%, #1e72c0 100%); color: white; padding: 0.9rem 1.25rem 0.8rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 3px 12px rgba(0,0,0,0.25); }
+  .header-inner { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .brasao { width: 54px; height: 54px; flex-shrink: 0; }
+  .header-text { text-align: left; }
+  .header-title { font-size: 10px; font-weight: 700; opacity: 0.8; letter-spacing: 0.12em; text-transform: uppercase; }
+  .header-main { font-size: 16px; font-weight: 700; margin: 1px 0; line-height: 1.2; }
+  .header-sub { font-size: 11px; opacity: 0.72; }
+
+  .tabs { display: flex; background: #0C447C; }
+  .tab { flex: 1; padding: 0.7rem 0.5rem; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; color: rgba(255,255,255,0.55); border-bottom: 3px solid transparent; transition: all 0.2s; letter-spacing: 0.03em; }
+  .tab.active { color: white; border-bottom-color: #85B7EB; background: rgba(255,255,255,0.08); }
+
+  .container { max-width: 480px; margin: 0 auto; padding: 1rem; }
+  .form-card { background: white; border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 6px rgba(0,0,0,0.08); margin-bottom: 1rem; }
+
+  .info-box { background: #E6F1FB; border-left: 3px solid #378ADD; border-radius: 6px; padding: 0.6rem 0.9rem; font-size: 12px; color: #0C447C; margin-bottom: 1rem; line-height: 1.6; }
+  .info-box.warning { background: #FFF7E6; border-left-color: #F0A500; color: #7A5000; }
+  .info-box.success { background: #E6F7EF; border-left-color: #2E9E5B; color: #1A5C35; }
+  .info-box.danger  { background: #FFF0F0; border-left-color: #C0392B; color: #7A1A1A; }
+
+  .section-label { font-size: 11px; font-weight: 700; color: #185FA5; text-transform: uppercase; letter-spacing: 0.08em; margin: 1rem 0 0.6rem; padding-bottom: 4px; border-bottom: 1.5px solid #B5D4F4; }
+  .section-label:first-child { margin-top: 0; }
+
+  .field { margin-bottom: 0.7rem; }
+  .field label { display: block; font-size: 12px; color: #555; margin-bottom: 4px; font-weight: 600; }
+  .field input, .field select, .field textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #dde3ea; border-radius: 8px; font-size: 14px; background: #fafbfc; color: #1a1a2e; font-family: inherit; transition: border-color 0.2s; -webkit-appearance: none; }
+  .field textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #378ADD; background: white; box-shadow: 0 0 0 3px rgba(55,138,221,0.12); }
+  .field input:read-only { background: #f0f4f8; color: #555; border-color: #dde3ea; }
+  .field input.changed, .field select.changed { background: #FFFBE6; border-color: #F0A500 !important; }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .btn { width: 100%; padding: 13px; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.03em; transition: all 0.2s; margin-top: 0.5rem; }
+  .btn-cautela   { background: #185FA5; color: white; }
+  .btn-descautela{ background: #A32D2D; color: white; }
+  .btn-buscar { background: #378ADD; color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; }
+  .btn-config { background: #185FA5; color: white; }
+  .btn-add-arma { background: #2E9E5B; color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn-add-arma:hover { background: #267a48; }
+  .btn-outline-danger { background: none; border: 1.5px solid #C0392B; color: #C0392B; border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* LISTA DE ARMAS NA CAUTELA */
+  .armas-lista { margin-top: 0.5rem; }
+  .arma-item { border: 1.5px solid #dde3ea; border-radius: 8px; padding: 0.8rem; margin-bottom: 0.6rem; background: #f7fbff; position: relative; }
+  .arma-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .arma-item-title { font-size: 12px; font-weight: 700; color: #185FA5; text-transform: uppercase; }
+  .arma-badge { background: #185FA5; color: white; border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 700; }
+
+  /* LISTA DE ARMAS NA DESCAUTELA */
+  .desc-arma-selecao { border: 2px solid #dde3ea; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.7rem; background: #f7fbff; cursor: pointer; transition: all 0.2s; }
+  .desc-arma-selecao.selecionada { border-color: #A32D2D; background: #FFF0F0; }
+  .desc-arma-selecao-header { display: flex; align-items: center; gap: 10px; }
+  .desc-arma-checkbox { width: 20px; height: 20px; accent-color: #A32D2D; flex-shrink: 0; cursor: pointer; }
+  .desc-arma-info { flex: 1; }
+  .desc-arma-titulo { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+  .desc-arma-sub { font-size: 11px; color: #666; margin-top: 2px; }
+  .desc-arma-badge { font-size: 10px; background: #E6F7EF; color: #1A5C35; border-radius: 4px; padding: 2px 6px; font-weight: 700; }
+
+  .total-badge { background: #185FA5; color: white; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+  .total-badge.vermelho { background: #A32D2D; }
+
+  /* Overlay e Senha */
+  .senha-overlay { position: fixed; inset: 0; background: rgba(12,68,124,0.6); z-index: 300; display: none; align-items: center; justify-content: center; }
+  .senha-box { background: white; border-radius: 14px; padding: 2rem 1.5rem; width: 90%; max-width: 320px; text-align: center; }
+  .senha-box input { width: 100%; padding: 12px; border: 1.5px solid #dde3ea; border-radius: 8px; font-size: 20px; text-align: center; margin-bottom: 1rem; }
+  .senha-erro { color: #A32D2D; font-size: 12px; font-weight: 600; margin-bottom: 0.5rem; display: none; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; color: white; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; text-align: center; width: 90%; max-width: 340px; }
+  .toast.show { opacity: 1; }
+  .toast.success { background: #185FA5; }
+  .toast.error   { background: #A32D2D; }
+
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(12,68,124,0.5); z-index: 200; align-items: center; justify-content: center; }
+  .overlay.show { display: flex; }
+  .spinner-box { background: white; border-radius: 12px; padding: 2rem; text-align: center; }
+  .spinner { width: 36px; height: 36px; border: 3px solid #B5D4F4; border-top-color: #185FA5; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #desc-form { display: none; }
+  .divider { border: none; border-top: 1.5px dashed #dde3ea; margin: 0.8rem 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <svg class="brasao" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 5 L90 20 L90 55 Q90 80 50 95 Q10 80 10 55 L10 20 Z" fill="#1a3a6b" stroke="#c9a227" stroke-width="3"/>
+      <path d="M10 42 L90 42 L90 58 L10 58 Z" fill="#c9a227"/>
+      <text x="50" y="75" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="11" font-weight="900" fill="#FFD700" letter-spacing="1">GMS</text>
+    </svg>
+    <div class="header-text">
+      <div class="header-title">Prefeitura Municipal de Serra — ES</div>
+      <div class="header-main">Guarda Municipal de Serra</div>
+      <div class="header-sub">Sistema de Cautela de Armamentos</div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('cautela')">⚙ Cautela</div>
+  <div class="tab" onclick="switchTab('descautela')">↩ Descautela</div>
+  <div class="tab" onclick="abrirConfig()">🔒 Config</div>
+</div>
+
+<div class="container">
+
+  <!-- ===================== ABA CAUTELA ===================== -->
+  <div class="tab-content active" id="tab-cautela">
+    <div class="form-card">
+      <div class="info-box">Preencha os dados do servidor e adicione quantas armas quiser antes de registrar.</div>
+
+      <div class="section-label">Identificação do Servidor</div>
+      <div class="field">
+        <label>Nome Completo *</label>
+        <input type="text" id="c-nome" placeholder="Ex: João da Silva">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>N° Funcional *</label>
+          <input type="text" id="c-funcional" inputmode="numeric" placeholder="Ex: 12345">
+        </div>
+        <div class="field">
+          <label>QRA *</label>
+          <input type="text" id="c-qra" placeholder="Ex: QRA-01">
+        </div>
+      </div>
+
+      <div class="section-label">Responsáveis</div>
+      <div class="field">
+        <label>Armeiro Responsável *</label>
+        <input type="text" id="c-armeiro" placeholder="Nome do armeiro">
+      </div>
+      <div class="field">
+        <label>Supervisor do Dia *</label>
+        <input type="text" id="c-supervisor" placeholder="Nome do supervisor">
+      </div>
+
+      <div class="section-label">Data e Hora</div>
+      <div class="field">
+        <label>Data e Hora da Cautela *</label>
+        <input type="datetime-local" id="c-datetime">
+      </div>
+    </div>
+
+    <!-- CARD DE ADIÇÃO DE ARMAS -->
+    <div class="form-card">
+      <div class="section-label">➕ Adicionar Armamento</div>
+      <div class="field">
+        <label>Tipo de Armamento *</label>
+        <select id="c-tipo-arma">
+          <option value="">Selecione...</option>
+          <option>Pistola</option>
+          <option>Carabina</option>
+          <option>Espingarda</option>
+          <option>Fuzil</option>
+          <option>Outros</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Número do Armamento *</label>
+        <input type="text" id="c-num-arma" placeholder="Ex: PA-0001">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Tipo de Munição</label>
+          <input type="text" id="c-tipo-mun" placeholder="Ex: .40">
+        </div>
+        <div class="field">
+          <label>Quantidade</label>
+          <input type="number" id="c-qtd-mun" placeholder="Ex: 15" inputmode="numeric">
+        </div>
+      </div>
+      <button class="btn-add-arma" onclick="adicionarArma()">
+        <span style="font-size:18px">+</span> Adicionar Arma à Lista
+      </button>
+    </div>
+
+    <!-- LISTA DE ARMAS ADICIONADAS -->
+    <div id="c-lista-container" style="display:none;">
+      <div class="form-card">
+        <div class="section-label">📋 Armas na Cautela</div>
+        <div id="c-armas-lista" class="armas-lista"></div>
+        <div id="c-total-badge" class="total-badge">0 arma(s) adicionada(s)</div>
+        <hr class="divider">
+        <button class="btn btn-cautela" onclick="submitCautela()">✔ Registrar Cautela Completa</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ABA DESCAUTELA ===================== -->
+  <div class="tab-content" id="tab-descautela">
+    <div class="form-card">
+      <div class="info-box">Digite o N° Funcional para buscar todas as cautelas ativas do servidor.</div>
+      <div class="field">
+        <label>N° Funcional *</label>
+        <input type="text" id="d-busca-funcional" inputmode="numeric" placeholder="Ex: 12345">
+      </div>
+      <button class="btn-buscar" onclick="buscarCautela()">🔍 Buscar Cautelas Ativas</button>
+    </div>
+
+    <div id="desc-form">
+      <!-- SELEÇÃO DE ARMAS -->
+      <div class="form-card">
+        <div class="info-box">Selecione a(s) arma(s) que serão devolvidas:</div>
+        <div class="section-label">Armas em Cautela Ativa</div>
+        <div id="desc-armas-selecao"></div>
+        <div id="desc-total-sel" class="total-badge vermelho" style="display:none;"></div>
+      </div>
+
+      <!-- DADOS DA DEVOLUÇÃO -->
+      <div class="form-card" id="desc-dados-form" style="display:none;">
+        <div class="section-label">Dados da Devolução</div>
+        <div class="info-box warning" id="desc-aviso-alteracao" style="display:none;">
+          Campos em amarelo foram alterados.
+        </div>
+
+        <div class="field">
+          <label>Nome Completo</label>
+          <input type="text" id="d-nome" readonly>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>N° Funcional</label>
+            <input type="text" id="d-funcional" readonly>
+          </div>
+          <div class="field">
+            <label>QRA</label>
+            <input type="text" id="d-qra" readonly>
+          </div>
+        </div>
+
+        <div class="section-label">Responsáveis na Devolução</div>
+        <div class="field">
+          <label>Armeiro Responsável *</label>
+          <input type="text" id="d-armeiro" placeholder="Nome do armeiro">
+        </div>
+        <div class="field">
+          <label>Supervisor do Dia *</label>
+          <input type="text" id="d-supervisor" placeholder="Nome do supervisor">
+        </div>
+
+        <div class="field">
+          <label>Observações</label>
+          <textarea id="d-obs" placeholder="Alguma alteração no estado do material?"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Data e Hora da Descautela *</label>
+          <input type="datetime-local" id="d-datetime">
+        </div>
+
+        <button class="btn btn-descautela" onclick="submitDescautela()">✔ Confirmar Descautela</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ABA CONFIG ===================== -->
+  <div class="tab-content" id="tab-config">
+    <div class="form-card">
+      <div class="section-label">URL do Script</div>
+      <div class="field">
+        <input type="url" id="cfg-url" placeholder="https://script.google.com/...">
+      </div>
+      <button class="btn btn-config" onclick="saveConfig()">Salvar URL</button>
+      <div id="cfg-status" style="margin-top:10px; font-size:12px; color:green;"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SENHA OVERLAY -->
+<div class="senha-overlay" id="senha-overlay">
+  <div class="senha-box">
+    <h3>🔒 Área Restrita</h3>
+    <input type="password" id="senha-input" placeholder="Senha">
+    <div class="senha-erro" id="senha-erro">Senha incorreta</div>
+    <button class="btn btn-cautela" onclick="verificarSenha()">Entrar</button>
+    <button onclick="fecharSenha()" style="background:none; border:none; color:#888; margin-top:10px; cursor:pointer;">Cancelar</button>
+  </div>
+</div>
+
+<div class="overlay" id="loading">
+  <div class="spinner-box"><div class="spinner"></div><p id="loading-msg">Processando...</p></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const SENHA_CONFIG = '270466';
+
+  // ESTADO DA CAUTELA: lista de armas a serem registradas
+  let armasCautela = [];
+
+  // ESTADO DA DESCAUTELA: cautelas encontradas
+  let cautelasEncontradas = []; // array de objetos {linha, tipoArma, numArma, tipoMun, qtdMun, dataHora, nome, funcional, qra}
+  let servidorEncontrado = {};
+
+  // ======== HELPERS ========
+  function getScriptUrl() { return localStorage.getItem('gms_script_url') || ''; }
+
+  function setDatetime(id) {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000;
+    const local = new Date(now - offset);
+    document.getElementById(id).value = local.toISOString().slice(0, 16);
+  }
+
+  function getVal(id) { return document.getElementById(id)?.value?.trim() || ''; }
+
+  function showLoading(msg) {
+    document.getElementById('loading-msg').textContent = msg || 'Enviando...';
+    document.getElementById('loading').classList.add('show');
+  }
+  function hideLoading() { document.getElementById('loading').classList.remove('show'); }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast', 3500);
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content, .tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    const tabs = document.querySelectorAll('.tab');
+    if (tab === 'cautela') { tabs[0].classList.add('active'); setDatetime('c-datetime'); }
+    if (tab === 'descautela') tabs[1].classList.add('active');
+    if (tab === 'config') tabs[2].classList.add('active');
+  }
+
+  // ======== CONFIG ========
+  function abrirConfig() {
+    document.getElementById('senha-overlay').style.display = 'flex';
+    document.getElementById('senha-input').value = '';
+    document.getElementById('senha-erro').style.display = 'none';
+  }
+  function fecharSenha() { document.getElementById('senha-overlay').style.display = 'none'; }
+  function verificarSenha() {
+    if (getVal('senha-input') === SENHA_CONFIG) {
+      fecharSenha();
+      switchTab('config');
+      document.getElementById('cfg-url').value = getScriptUrl();
+    } else {
+      document.getElementById('senha-erro').style.display = 'block';
+    }
+  }
+  function saveConfig() {
+    const url = getVal('cfg-url');
+    if (!url.includes('/exec')) return showToast('URL inválida', 'error');
+    localStorage.setItem('gms_script_url', url);
+    showToast('URL Salva!', 'success');
+  }
+
+  // ======== CAUTELA: GERENCIAMENTO DA LISTA DE ARMAS ========
+  function adicionarArma() {
+    const tipo = getVal('c-tipo-arma');
+    const num  = getVal('c-num-arma');
+    if (!tipo) return showToast('Selecione o tipo de armamento', 'error');
+    if (!num)  return showToast('Informe o número do armamento', 'error');
+
+    // Verificar duplicata
+    if (armasCautela.find(a => a.numArma === num)) {
+      return showToast(`Arma ${num} já está na lista`, 'error');
+    }
+
+    armasCautela.push({
+      tipoArma: tipo,
+      numArma:  num,
+      tipoMun:  getVal('c-tipo-mun'),
+      qtdMun:   getVal('c-qtd-mun')
+    });
+
+    // Limpar campos de arma
+    document.getElementById('c-tipo-arma').value = '';
+    document.getElementById('c-num-arma').value = '';
+    document.getElementById('c-tipo-mun').value = '';
+    document.getElementById('c-qtd-mun').value = '';
+
+    renderizarListaCautela();
+    showToast(`${tipo} ${num} adicionada!`, 'success');
+  }
+
+  function removerArma(idx) {
+    armasCautela.splice(idx, 1);
+    renderizarListaCautela();
+  }
+
+  function renderizarListaCautela() {
+    const container = document.getElementById('c-lista-container');
+    const lista     = document.getElementById('c-armas-lista');
+    const badge     = document.getElementById('c-total-badge');
+
+    if (armasCautela.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+    container.style.display = 'block';
+    badge.textContent = `${armasCautela.length} arma(s) adicionada(s)`;
+
+    lista.innerHTML = armasCautela.map((a, i) => `
+      <div class="arma-item">
+        <div class="arma-item-header">
+          <span class="arma-item-title">🔫 ${a.tipoArma} — ${a.numArma}</span>
+          <button class="btn-outline-danger" onclick="removerArma(${i})">✕ Remover</button>
+        </div>
+        ${a.tipoMun ? `<div style="font-size:12px;color:#555;">Munição: <strong>${a.tipoMun}</strong> — Qtd: <strong>${a.qtdMun || '—'}</strong></div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // ======== CAUTELA: SUBMIT ========
+  async function submitCautela() {
+    const nome       = getVal('c-nome');
+    const funcional  = getVal('c-funcional');
+    const qra        = getVal('c-qra');
+    const armeiro    = getVal('c-armeiro');
+    const supervisor = getVal('c-supervisor');
+    const dataHora   = getVal('c-datetime').replace('T', ' ');
+
+    if (!nome || !funcional || !qra)         return showToast('Preencha nome, funcional e QRA', 'error');
+    if (!armeiro || !supervisor)             return showToast('Informe armeiro e supervisor', 'error');
+    if (armasCautela.length === 0)           return showToast('Adicione ao menos uma arma', 'error');
+    if (!getScriptUrl())                     return showToast('Configure a URL na aba Config', 'error');
+
+    // Montar um registro por arma
+    const registros = armasCautela.map(a => ({
+      tipo: 'CAUTELA',
+      nome, funcional, qra,
+      tipoArma:  a.tipoArma,
+      numArma:   a.numArma,
+      tipoMun:   a.tipoMun,
+      qtdMun:    a.qtdMun,
+      armeiro, supervisor, dataHora
+    }));
+
+    showLoading(`Salvando ${registros.length} arma(s)...`);
+    try {
+      // Envia array de registros
+      await fetch(getScriptUrl(), {
+        method: 'POST',
+        body: JSON.stringify({ tipo: 'CAUTELA_LOTE', registros })
+      });
+      hideLoading();
+      showToast(`${registros.length} cautela(s) registrada(s)!`, 'success');
+
+      // Limpar tudo
+      armasCautela = [];
+      renderizarListaCautela();
+      ['c-nome','c-funcional','c-qra','c-armeiro','c-supervisor'].forEach(id => document.getElementById(id).value = '');
+      setDatetime('c-datetime');
+    } catch (e) {
+      hideLoading();
+      showToast('Erro ao salvar', 'error');
+    }
+  }
+
+  // ======== DESCAUTELA: BUSCA ========
+  async function buscarCautela() {
+    const func = getVal('d-busca-funcional');
+    if (!func) return showToast('Informe o funcional', 'error');
+    if (!getScriptUrl()) return showToast('Configure a URL na aba Config', 'error');
+
+    showLoading('Buscando cautelas ativas...');
+    try {
+      const resp = await fetch(`${getScriptUrl()}?acao=buscar&funcional=${func}`);
+      const data = await resp.json();
+      hideLoading();
+
+      if (data.status === 'ok') {
+        // Suporte a múltiplas cautelas (array) ou cautela única (retrocompatível)
+        if (Array.isArray(data.cautelas) && data.cautelas.length > 0) {
+          cautelasEncontradas = data.cautelas;
+        } else if (data.cautela) {
+          cautelasEncontradas = [data.cautela]; // retrocompatível com script antigo
+        } else {
+          cautelasEncontradas = [];
+        }
+
+        if (cautelasEncontradas.length === 0) {
+          showToast('Nenhuma cautela ativa encontrada.', 'error');
+          document.getElementById('desc-form').style.display = 'none';
+          return;
+        }
+
+        servidorEncontrado = {
+          nome:      cautelasEncontradas[0].nome,
+          funcional: cautelasEncontradas[0].funcional,
+          qra:       cautelasEncontradas[0].qra
+        };
+
+        renderizarSelecaoDescautela();
+        document.getElementById('desc-form').style.display = 'block';
+
+      } else {
+        showToast('Nenhuma cautela ativa encontrada.', 'error');
+        document.getElementById('desc-form').style.display = 'none';
+      }
+    } catch (e) {
+      hideLoading();
+      showToast('Erro na busca', 'error');
+    }
+  }
+
+  function renderizarSelecaoDescautela() {
+    const container = document.getElementById('desc-armas-selecao');
+    container.innerHTML = cautelasEncontradas.map((c, i) => `
+      <div class="desc-arma-selecao" id="sel-card-${i}" onclick="toggleSelecao(${i})">
+        <div class="desc-arma-selecao-header">
+          <input type="checkbox" class="desc-arma-checkbox" id="sel-check-${i}" onchange="atualizarContadorSelecao()">
+          <div class="desc-arma-info">
+            <div class="desc-arma-titulo">🔫 ${c.tipoArma} — ${c.numArma}</div>
+            <div class="desc-arma-sub">
+              ${c.tipoMun ? `Munição: ${c.tipoMun} (${c.qtdMun || 0} un.)` : 'Sem munição registrada'}
+              &nbsp;|&nbsp; Retirada: ${c.dataHora || '—'}
+            </div>
+          </div>
+          <span class="desc-arma-badge">Linha ${c.linha}</span>
+        </div>
+      </div>
+    `).join('');
+
+    // Preencher dados do servidor
+    document.getElementById('d-nome').value      = servidorEncontrado.nome || '';
+    document.getElementById('d-funcional').value = servidorEncontrado.funcional || '';
+    document.getElementById('d-qra').value       = servidorEncontrado.qra || '';
+    setDatetime('d-datetime');
+
+    document.getElementById('desc-dados-form').style.display = 'none';
+    document.getElementById('desc-total-sel').style.display = 'none';
+    atualizarContadorSelecao();
+  }
+
+  function toggleSelecao(idx) {
+    const cb = document.getElementById(`sel-check-${idx}`);
+    cb.checked = !cb.checked;
+    atualizarContadorSelecao();
+  }
+
+  function atualizarContadorSelecao() {
+    let total = 0;
+    cautelasEncontradas.forEach((_, i) => {
+      const cb   = document.getElementById(`sel-check-${i}`);
+      const card = document.getElementById(`sel-card-${i}`);
+      if (cb && cb.checked) {
+        total++;
+        card.classList.add('selecionada');
+      } else if (card) {
+        card.classList.remove('selecionada');
+      }
+    });
+
+    const badge = document.getElementById('desc-total-sel');
+    const dadosForm = document.getElementById('desc-dados-form');
+    if (total > 0) {
+      badge.textContent = `${total} arma(s) selecionada(s) para devolução`;
+      badge.style.display = 'block';
+      dadosForm.style.display = 'block';
+    } else {
+      badge.style.display = 'none';
+      dadosForm.style.display = 'none';
+    }
+  }
+
+  function getSelecionadas() {
+    return cautelasEncontradas.filter((_, i) => {
+      const cb = document.getElementById(`sel-check-${i}`);
+      return cb && cb.checked;
+    });
+  }
+
+  // ======== DESCAUTELA: SUBMIT ========
+  async function submitDescautela() {
+    const selecionadas = getSelecionadas();
+    if (selecionadas.length === 0) return showToast('Selecione ao menos uma arma', 'error');
+
+    const armeiro    = getVal('d-armeiro');
+    const supervisor = getVal('d-supervisor');
+    const dataHora   = getVal('d-datetime').replace('T', ' ');
+    const obs        = getVal('d-obs');
+
+    if (!armeiro || !supervisor) return showToast('Informe armeiro e supervisor', 'error');
+    if (!getScriptUrl())         return showToast('Configure a URL na aba Config', 'error');
+
+    // Um registro de descautela por arma selecionada
+    const registros = selecionadas.map(c => ({
+      linha:     c.linha,
+      nome:      c.nome      || servidorEncontrado.nome,
+      funcional: c.funcional || servidorEncontrado.funcional,
+      qra:       c.qra       || servidorEncontrado.qra,
+      tipoArma:  c.tipoArma,
+      numArma:   c.numArma,
+      tipoMun:   c.tipoMun,
+      qtdMun:    c.qtdMun,
+      armeiro, supervisor, dataHora,
+      alteracoes: obs ? `Obs: ${obs}` : ''
+    }));
+
+    showLoading(`Devolvendo ${registros.length} arma(s)...`);
+    try {
+      await fetch(getScriptUrl(), {
+        method: 'POST',
+        body: JSON.stringify({ tipo: 'DESCAUTELA_LOTE', registros })
+      });
+      hideLoading();
+      showToast(`${registros.length} arma(s) devolvida(s)!`, 'success');
+
+      // Reset
+      document.getElementById('desc-form').style.display = 'none';
+      document.getElementById('d-busca-funcional').value = '';
+      document.getElementById('d-armeiro').value = '';
+      document.getElementById('d-supervisor').value = '';
+      document.getElementById('d-obs').value = '';
+      cautelasEncontradas = [];
+      servidorEncontrado = {};
+      switchTab('cautela');
+    } catch (e) {
+      hideLoading();
+      showToast('Erro ao processar', 'error');
+    }
+  }
+
+  window.onload = () => setDatetime('c-datetime');
+</script>
+
+</body>
+</html>
