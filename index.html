@@ -478,29 +478,47 @@
 
   // ===== BUSCAR CAUTELA =====
   async function buscarCautela() {
-    const funcional = getVal('d-busca-funcional');
-    if (!funcional) { showToast('Digite o N° Funcional para buscar', 'error'); return; }
+  const funcional = getVal('d-busca-funcional');
 
-    showLoading('Buscando cautela<br>ativa...');
-    try {
-      const url = getScriptUrl() + '?acao=buscar&funcional=' + encodeURIComponent(funcional);
-      const resp = await fetch(url);
-      const data = await resp.json();
-      hideLoading();
-
-      if (data.status === 'ok' && data.cautela) {
-        preencherDescautela(data.cautela);
-      } else if (data.status === 'nao_encontrado') {
-        showToast('Nenhuma cautela ativa para este funcional.', 'error');
-        document.getElementById('desc-form').style.display = 'none';
-      } else {
-        showToast('Erro ao buscar. Tente novamente.', 'error');
-      }
-    } catch(e) {
-      hideLoading();
-      showToast('Erro de conexão ao buscar.', 'error');
-    }
+  if (!funcional) {
+    showToast('Digite o funcional', 'error');
+    return;
   }
+
+  showLoading('Buscando cautela...');
+
+  try {
+    const url = getScriptUrl() + '?acao=buscar&funcional=' + encodeURIComponent(funcional);
+
+    const resp = await fetch(url);
+    const text = await resp.text();
+
+    if (!text) throw new Error('Resposta vazia');
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      console.error('Resposta inválida:', text);
+      throw new Error('JSON inválido');
+    }
+
+    hideLoading();
+
+    if (data.status === 'ok' && data.cautela) {
+      preencherDescautela(data.cautela);
+    } else if (data.status === 'nao_encontrado') {
+      showToast('Nenhuma cautela ativa.', 'error');
+    } else {
+      showToast('Erro ao buscar.', 'error');
+    }
+
+  } catch (e) {
+    hideLoading();
+    console.error(e);
+    showToast('Erro de conexão. Tente novamente.', 'error');
+  }
+}
 
   function preencherDescautela(c) {
     cautelaOriginal = c;
