@@ -2,6 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+ <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Cautela de Armamentos — GMS</title>
 <style>
@@ -366,9 +369,9 @@
     'd-num-arma': '', 'd-tipo-mun': '', 'd-qtd-mun': ''
   };
 
-  function getScriptUrl() {
-    return localStorage.getItem('gms_script_url') || SCRIPT_URL_DEFAULT;
-  }
+function getScriptUrl() {
+  return 'https://script.google.com/macros/s/AKfycbxTtKPOj2j_KKbeblXXV3H0aPNsnoMnjIFV3fDGjt81VSqJEFJDV882aSvrEy5RsyWeOQ/exec';
+}
 
   // ===== HELPERS =====
   function setDatetime(id) {
