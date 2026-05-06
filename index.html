@@ -8,50 +8,92 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; min-height: 100vh; }
 
-  .header { background: #185FA5; color: white; padding: 1rem 1.25rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-  .header-title { font-size: 11px; font-weight: 600; opacity: 0.8; letter-spacing: 0.1em; text-transform: uppercase; }
-  .header-main { font-size: 18px; font-weight: 600; margin: 2px 0; }
-  .header-sub { font-size: 12px; opacity: 0.75; }
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #0C447C 0%, #185FA5 60%, #1e72c0 100%); color: white; padding: 0.9rem 1.25rem 0.8rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 3px 12px rgba(0,0,0,0.25); }
+  .header-inner { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .brasao { width: 54px; height: 54px; flex-shrink: 0; }
+  .header-text { text-align: left; }
+  .header-title { font-size: 10px; font-weight: 700; opacity: 0.8; letter-spacing: 0.12em; text-transform: uppercase; }
+  .header-main { font-size: 16px; font-weight: 700; margin: 1px 0; line-height: 1.2; }
+  .header-sub { font-size: 11px; opacity: 0.72; }
 
+  /* TABS */
   .tabs { display: flex; background: #0C447C; }
-  .tab { flex: 1; padding: 0.7rem 0.5rem; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; color: rgba(255,255,255,0.6); border-bottom: 3px solid transparent; transition: all 0.2s; letter-spacing: 0.03em; }
+  .tab { flex: 1; padding: 0.7rem 0.5rem; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; color: rgba(255,255,255,0.55); border-bottom: 3px solid transparent; transition: all 0.2s; letter-spacing: 0.03em; }
   .tab.active { color: white; border-bottom-color: #85B7EB; background: rgba(255,255,255,0.08); }
 
   .container { max-width: 480px; margin: 0 auto; padding: 1rem; }
 
-  .form-card { background: white; border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 1rem; }
+  .form-card { background: white; border-radius: 12px; padding: 1.25rem; box-shadow: 0 1px 6px rgba(0,0,0,0.08); margin-bottom: 1rem; }
 
-  .info-box { background: #E6F1FB; border-left: 3px solid #378ADD; border-radius: 6px; padding: 0.6rem 0.9rem; font-size: 12px; color: #0C447C; margin-bottom: 1rem; line-height: 1.5; }
+  .info-box { background: #E6F1FB; border-left: 3px solid #378ADD; border-radius: 6px; padding: 0.6rem 0.9rem; font-size: 12px; color: #0C447C; margin-bottom: 1rem; line-height: 1.6; }
+  .info-box.warning { background: #FFF7E6; border-left-color: #F0A500; color: #7A5000; }
+  .info-box.success { background: #E6F7EF; border-left-color: #2E9E5B; color: #1A5C35; }
+  .info-box.danger  { background: #FFF0F0; border-left-color: #C0392B; color: #7A1A1A; }
 
   .section-label { font-size: 11px; font-weight: 700; color: #185FA5; text-transform: uppercase; letter-spacing: 0.08em; margin: 1rem 0 0.6rem; padding-bottom: 4px; border-bottom: 1.5px solid #B5D4F4; }
   .section-label:first-child { margin-top: 0; }
 
   .field { margin-bottom: 0.7rem; }
   .field label { display: block; font-size: 12px; color: #555; margin-bottom: 4px; font-weight: 600; }
-  .field input, .field select { width: 100%; padding: 10px 12px; border: 1.5px solid #dde3ea; border-radius: 8px; font-size: 14px; background: #fafbfc; color: #1a1a2e; font-family: inherit; transition: border-color 0.2s; -webkit-appearance: none; }
-  .field input:focus, .field select:focus { outline: none; border-color: #378ADD; background: white; box-shadow: 0 0 0 3px rgba(55,138,221,0.12); }
+  .field input, .field select, .field textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #dde3ea; border-radius: 8px; font-size: 14px; background: #fafbfc; color: #1a1a2e; font-family: inherit; transition: border-color 0.2s; -webkit-appearance: none; }
+  .field textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #378ADD; background: white; box-shadow: 0 0 0 3px rgba(55,138,221,0.12); }
+  .field input:read-only { background: #f0f4f8; color: #555; border-color: #dde3ea; }
+  .field input.changed, .field select.changed { background: #FFFBE6; border-color: #F0A500 !important; }
   .field .hint { font-size: 11px; color: #888; margin-top: 3px; }
 
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
+  /* BOTÕES */
   .btn { width: 100%; padding: 13px; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.03em; transition: all 0.2s; margin-top: 0.5rem; }
-  .btn-cautela { background: #185FA5; color: white; }
-  .btn-cautela:hover { background: #0C447C; }
-  .btn-cautela:active { transform: scale(0.98); }
-  .btn-descautela { background: #A32D2D; color: white; }
-  .btn-descautela:hover { background: #791F1F; }
-  .btn-descautela:active { transform: scale(0.98); }
-  .btn-config { background: #378ADD; color: white; }
-  .btn-config:hover { background: #185FA5; }
+  .btn-cautela   { background: #185FA5; color: white; }
+  .btn-cautela:hover   { background: #0C447C; }
+  .btn-cautela:active  { transform: scale(0.98); }
+  .btn-descautela{ background: #A32D2D; color: white; }
+  .btn-descautela:hover{ background: #791F1F; }
+  .btn-descautela:active{ transform: scale(0.98); }
+  .btn-buscar { background: #378ADD; color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; transition: background 0.2s; }
+  .btn-buscar:hover { background: #185FA5; }
+  .btn-buscar:active { transform: scale(0.98); }
+  .btn-config { background: #185FA5; color: white; }
+  .btn-config:hover { background: #0C447C; }
 
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; color: white; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; text-align: center; max-width: 320px; width: 90%; }
+  /* Card cautela encontrada */
+  .cautela-card { border: 2px solid #378ADD; border-radius: 10px; padding: 1rem; margin-bottom: 1rem; background: #f7fbff; }
+  .cautela-card-title { font-size: 12px; font-weight: 700; color: #185FA5; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px; }
+  .cautela-card-title::before { content: ''; display: inline-block; width: 8px; height: 8px; background: #2E9E5B; border-radius: 50%; }
+  .cautela-card-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #333; padding: 5px 0; border-bottom: 0.5px solid #dde3ea; }
+  .cautela-card-row:last-child { border-bottom: none; }
+  .cautela-card-row span:first-child { color: #666; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+  .cautela-card-row span:last-child { font-weight: 700; font-size: 13px; }
+
+  /* Senha overlay */
+  .senha-overlay { position: fixed; inset: 0; background: rgba(12,68,124,0.6); z-index: 300; display: flex; align-items: center; justify-content: center; }
+  .senha-box { background: white; border-radius: 14px; padding: 2rem 1.5rem; width: 90%; max-width: 320px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .senha-box h3 { color: #185FA5; font-size: 16px; margin-bottom: 6px; }
+  .senha-box p { font-size: 12px; color: #666; margin-bottom: 1.2rem; }
+  .senha-box input { width: 100%; padding: 12px; border: 1.5px solid #dde3ea; border-radius: 8px; font-size: 20px; text-align: center; letter-spacing: 0.3em; margin-bottom: 1rem; font-family: monospace; }
+  .senha-box input:focus { outline: none; border-color: #378ADD; }
+  .senha-erro { color: #A32D2D; font-size: 12px; font-weight: 600; margin-bottom: 0.5rem; display: none; }
+  .btn-senha { background: #185FA5; color: white; border: none; border-radius: 8px; padding: 12px; width: 100%; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn-senha:hover { background: #0C447C; }
+  .btn-cancelar-senha { background: none; border: none; color: #888; font-size: 13px; cursor: pointer; margin-top: 10px; width: 100%; }
+
+  /* Config steps */
+  .config-steps { background: #f8fafc; border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 12px; color: #444; line-height: 1.9; }
+  .config-steps strong { color: #185FA5; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; color: white; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; text-align: center; max-width: 340px; width: 90%; }
   .toast.show { opacity: 1; }
   .toast.success { background: #185FA5; }
-  .toast.error { background: #A32D2D; }
+  .toast.error   { background: #A32D2D; }
 
+  /* Loading */
   .overlay { display: none; position: fixed; inset: 0; background: rgba(12,68,124,0.5); z-index: 200; align-items: center; justify-content: center; }
   .overlay.show { display: flex; }
   .spinner-box { background: white; border-radius: 12px; padding: 2rem; text-align: center; min-width: 180px; }
@@ -59,30 +101,47 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .spinner-box p { font-size: 13px; color: #185FA5; font-weight: 600; }
 
-  .config-steps { background: #f8fafc; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
-  .config-steps p { font-size: 12px; color: #444; line-height: 1.8; }
-  .config-steps strong { color: #185FA5; }
-
-  .url-saved { display: inline-block; background: #E6F1FB; color: #0C447C; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; margin-top: 6px; }
+  #desc-form { display: none; }
 </style>
 </head>
 <body>
 
+<!-- HEADER COM BRASÃO -->
 <div class="header">
-  <div class="header-title">Guarda Municipal de Serra</div>
-  <div class="header-main">Sistema de Cautela de Armamentos</div>
-  <div class="header-sub" id="datetime-header"></div>
+  <div class="header-inner">
+    <!-- Brasão GMS em SVG -->
+    <svg class="brasao" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Escudo base -->
+      <path d="M50 5 L90 20 L90 55 Q90 80 50 95 Q10 80 10 55 L10 20 Z" fill="#1a3a6b" stroke="#c9a227" stroke-width="3"/>
+      <!-- Faixa central -->
+      <path d="M10 42 L90 42 L90 58 L10 58 Z" fill="#c9a227"/>
+      <!-- Estrela central -->
+      <polygon points="50,25 53,35 63,35 55,41 58,51 50,45 42,51 45,41 37,35 47,35" fill="#FFD700" stroke="#c9a227" stroke-width="0.5"/>
+      <!-- Letras GMS -->
+      <text x="50" y="75" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="11" font-weight="900" fill="#FFD700" letter-spacing="1">GMS</text>
+      <!-- Bordas do escudo - detalhe -->
+      <path d="M50 5 L90 20 L90 55 Q90 80 50 95 Q10 80 10 55 L10 20 Z" fill="none" stroke="#FFD700" stroke-width="1.5"/>
+      <!-- Ramos laterais simplificados -->
+      <path d="M18 22 Q14 30 13 40" fill="none" stroke="#c9a227" stroke-width="2" stroke-linecap="round"/>
+      <path d="M82 22 Q86 30 87 40" fill="none" stroke="#c9a227" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="header-text">
+      <div class="header-title">Prefeitura Municipal de Serra — ES</div>
+      <div class="header-main">Guarda Municipal de Serra</div>
+      <div class="header-sub">Sistema de Cautela de Armamentos</div>
+    </div>
+  </div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="switchTab('cautela')">Cautela</div>
-  <div class="tab" onclick="switchTab('descautela')">Descautela</div>
-  <div class="tab" onclick="switchTab('config')">Configurar</div>
+  <div class="tab active" onclick="switchTab('cautela')">⚙ Cautela</div>
+  <div class="tab" onclick="switchTab('descautela')">↩ Descautela</div>
+  <div class="tab" onclick="abrirConfig()">🔒 Config</div>
 </div>
 
 <div class="container">
 
-  <!-- CAUTELA -->
+  <!-- ===== CAUTELA ===== -->
   <div class="tab-content active" id="tab-cautela">
     <div class="form-card">
       <div class="info-box">Preencha todos os campos para registrar a retirada do armamento.</div>
@@ -90,7 +149,7 @@
       <div class="section-label">Identificação do Servidor</div>
       <div class="field">
         <label>Nome Completo *</label>
-        <input type="text" id="c-nome" placeholder="Ex: João da Silva">
+        <input type="text" id="c-nome" placeholder="Ex: João da Silva" autocomplete="off">
       </div>
       <div class="row2">
         <div class="field">
@@ -149,126 +208,169 @@
         <div class="hint">Preenchido automaticamente — ajuste se necessário</div>
       </div>
 
-      <button class="btn btn-cautela" onclick="submitForm('cautela')">Registrar Cautela</button>
+      <button class="btn btn-cautela" onclick="submitCautela()">✔ Registrar Cautela</button>
     </div>
   </div>
 
-  <!-- DESCAUTELA -->
+  <!-- ===== DESCAUTELA ===== -->
   <div class="tab-content" id="tab-descautela">
     <div class="form-card">
-      <div class="info-box">Registre a devolução do armamento ao paiol.</div>
-
-      <div class="section-label">Identificação do Servidor</div>
+      <div class="info-box">Digite o N° Funcional para buscar a cautela ativa do agente.</div>
+      <div class="section-label">Buscar Cautela Ativa</div>
       <div class="field">
-        <label>Nome Completo *</label>
-        <input type="text" id="d-nome" placeholder="Ex: João da Silva">
+        <label>N° Funcional *</label>
+        <input type="text" id="d-busca-funcional" inputmode="numeric" placeholder="Ex: 12345">
       </div>
-      <div class="row2">
+      <button class="btn-buscar" onclick="buscarCautela()">🔍 Buscar Cautela</button>
+    </div>
+
+    <div id="desc-form">
+      <div class="form-card" id="desc-card-encontrada"></div>
+
+      <div class="form-card">
+        <div class="info-box warning" id="desc-aviso-alteracao" style="display:none">
+          Os campos em <strong>amarelo</strong> foram alterados em relação à cautela original. As alterações serão registradas automaticamente na planilha.
+        </div>
+
+        <div class="section-label">Confirmar / Corrigir Dados</div>
         <div class="field">
-          <label>N° Funcional *</label>
-          <input type="text" id="d-funcional" inputmode="numeric" placeholder="Ex: 12345">
+          <label>Nome Completo</label>
+          <input type="text" id="d-nome" oninput="checkAlteracao(this,'d-nome')">
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>N° Funcional</label>
+            <input type="text" id="d-funcional" readonly>
+          </div>
+          <div class="field">
+            <label>QRA</label>
+            <input type="text" id="d-qra" oninput="checkAlteracao(this,'d-qra')">
+          </div>
+        </div>
+
+        <div class="section-label">Armamento Devolvido</div>
+        <div class="field">
+          <label>Tipo de Armamento</label>
+          <select id="d-tipo-arma" onchange="checkAlteracao(this,'d-tipo-arma')">
+            <option value="">Selecione...</option>
+            <option>Pistola</option>
+            <option>Carabina</option>
+            <option>Espingarda</option>
+            <option>Fuzil</option>
+            <option>Outros</option>
+          </select>
         </div>
         <div class="field">
-          <label>QRA *</label>
-          <input type="text" id="d-qra" placeholder="Ex: QRA-01">
+          <label>Número do Armamento</label>
+          <input type="text" id="d-num-arma" oninput="checkAlteracao(this,'d-num-arma')">
         </div>
-      </div>
 
-      <div class="section-label">Armamento Devolvido</div>
-      <div class="field">
-        <label>Tipo de Armamento *</label>
-        <select id="d-tipo-arma">
-          <option value="">Selecione...</option>
-          <option>Pistola</option>
-          <option>Carabina</option>
-          <option>Espingarda</option>
-          <option>Fuzil</option>
-          <option>Outros</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Número do Armamento *</label>
-        <input type="text" id="d-num-arma" placeholder="Ex: PA-0001 ou Série AB123">
-      </div>
+        <div class="section-label">Munição Devolvida</div>
+        <div class="row2">
+          <div class="field">
+            <label>Tipo de Munição</label>
+            <input type="text" id="d-tipo-mun" oninput="checkAlteracao(this,'d-tipo-mun')">
+          </div>
+          <div class="field">
+            <label>Qtd. Devolvida</label>
+            <input type="number" id="d-qtd-mun" min="0" inputmode="numeric" oninput="checkAlteracao(this,'d-qtd-mun')">
+          </div>
+        </div>
 
-      <div class="section-label">Munição Devolvida</div>
-      <div class="row2">
+        <div class="section-label">Responsáveis</div>
         <div class="field">
-          <label>Tipo de Munição</label>
-          <input type="text" id="d-tipo-mun" placeholder="Ex: .40 / 12 / 5.56">
+          <label>Armeiro Responsável *</label>
+          <input type="text" id="d-armeiro" placeholder="Nome do armeiro">
         </div>
         <div class="field">
-          <label>Qtd. Devolvida</label>
-          <input type="number" id="d-qtd-mun" placeholder="Ex: 15" min="0" inputmode="numeric">
+          <label>Supervisor do Dia *</label>
+          <input type="text" id="d-supervisor" placeholder="Nome do supervisor">
         </div>
-      </div>
 
-      <div class="section-label">Responsáveis</div>
-      <div class="field">
-        <label>Armeiro Responsável *</label>
-        <input type="text" id="d-armeiro" placeholder="Nome do armeiro">
-      </div>
-      <div class="field">
-        <label>Supervisor do Dia *</label>
-        <input type="text" id="d-supervisor" placeholder="Nome do supervisor">
-      </div>
+        <div class="section-label">Observações / Alterações</div>
+        <div class="field">
+          <label>Observações (opcional)</label>
+          <textarea id="d-obs" placeholder="Ex: Armamento devolvido com amassado na coronha, munição com divergência, etc."></textarea>
+          <div class="hint">As alterações nos campos acima são registradas automaticamente. Use este campo para observações adicionais.</div>
+        </div>
 
-      <div class="section-label">Data e Hora</div>
-      <div class="field">
-        <label>Data e Hora da Descautela *</label>
-        <input type="datetime-local" id="d-datetime">
-        <div class="hint">Preenchido automaticamente — ajuste se necessário</div>
-      </div>
+        <div class="section-label">Data e Hora</div>
+        <div class="field">
+          <label>Data e Hora da Descautela *</label>
+          <input type="datetime-local" id="d-datetime">
+          <div class="hint">Preenchido automaticamente — ajuste se necessário</div>
+        </div>
 
-      <button class="btn btn-descautela" onclick="submitForm('descautela')">Registrar Descautela</button>
+        <button class="btn btn-descautela" onclick="submitDescautela()">✔ Confirmar Descautela</button>
+      </div>
     </div>
   </div>
 
-  <!-- CONFIGURAR -->
+  <!-- ===== CONFIG (oculto, acesso por senha) ===== -->
   <div class="tab-content" id="tab-config">
     <div class="form-card">
-      <div class="info-box">Cole aqui a URL do Google Apps Script para conectar ao Google Sheets. A URL deve terminar em <strong>/exec</strong>.</div>
-
+      <div class="info-box danger">Área restrita — somente armeiro autorizado.</div>
+      <div class="section-label">URL do Google Apps Script</div>
       <div class="field">
-        <label>URL do Google Apps Script</label>
+        <label>URL atual</label>
         <input type="url" id="cfg-url" placeholder="https://script.google.com/macros/s/.../exec" style="font-size:12px;">
-        <div id="url-status"></div>
       </div>
       <button class="btn btn-config" onclick="saveConfig()">Salvar URL</button>
+      <div id="cfg-status" style="margin-top:8px; font-size:12px; color:#2E9E5B; font-weight:600;"></div>
 
       <div class="config-steps">
-        <div class="section-label" style="margin-top:0;">Passo a passo</div>
-        <p>
-          1. Crie uma planilha no <strong>Google Sheets</strong><br>
-          2. Clique em <strong>Extensões → Apps Script</strong><br>
-          3. Apague o conteúdo e cole o código fornecido<br>
-          4. Salve com <strong>Ctrl+S</strong><br>
-          5. Clique em <strong>Implantar → Nova implantação</strong><br>
-          6. Tipo: <strong>App da Web</strong><br>
-          7. Quem tem acesso: <strong>Qualquer pessoa</strong><br>
-          8. Clique em <strong>Implantar</strong> e autorize<br>
-          9. Copie a URL gerada (termina em <strong>/exec</strong>)<br>
-          10. Cole acima e clique em <strong>Salvar URL</strong>
-        </p>
+        <strong>Passo a passo:</strong><br>
+        1. Crie uma planilha no <strong>Google Sheets</strong><br>
+        2. Clique em <strong>Extensões → Apps Script</strong><br>
+        3. Apague o conteúdo e cole o código fornecido<br>
+        4. Salve com <strong>Ctrl+S</strong><br>
+        5. Clique em <strong>Implantar → Nova implantação</strong><br>
+        6. Tipo: <strong>App da Web</strong> / Acesso: <strong>Qualquer pessoa</strong><br>
+        7. Copie a URL (termina em <strong>/exec</strong>) e cole acima
       </div>
     </div>
   </div>
 
+</div>
+
+<!-- Modal Senha -->
+<div class="senha-overlay" id="senha-overlay" style="display:none">
+  <div class="senha-box">
+    <h3>🔒 Área Restrita</h3>
+    <p>Digite a senha para acessar as configurações do sistema.</p>
+    <input type="password" id="senha-input" maxlength="10" placeholder="••••••" onkeydown="if(event.key==='Enter') verificarSenha()">
+    <div class="senha-erro" id="senha-erro">Senha incorreta. Tente novamente.</div>
+    <button class="btn-senha" onclick="verificarSenha()">Entrar</button>
+    <button class="btn-cancelar-senha" onclick="fecharSenha()">Cancelar</button>
+  </div>
 </div>
 
 <!-- Loading -->
 <div class="overlay" id="loading">
   <div class="spinner-box">
     <div class="spinner"></div>
-    <p>Enviando para<br>a planilha...</p>
+    <p id="loading-msg">Enviando para<br>a planilha...</p>
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // Data/hora automática
+  // ===== URL FIXA =====
+  const SCRIPT_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbzKbf4YqzMSTaHKqbUnBhDTQfLc9A9ke65_E_C8hAcbedEwBvR4dDvUIkj9ZsseGvE6mg/exec';
+  const SENHA_CONFIG = '270466';
+
+  let cautelaOriginal = null;
+  const camposComparacao = {
+    'd-nome': '', 'd-qra': '', 'd-tipo-arma': '',
+    'd-num-arma': '', 'd-tipo-mun': '', 'd-qtd-mun': ''
+  };
+
+  function getScriptUrl() {
+    return localStorage.getItem('gms_script_url') || SCRIPT_URL_DEFAULT;
+  }
+
+  // ===== HELPERS =====
   function setDatetime(id) {
     const now = new Date();
     const offset = now.getTimezoneOffset() * 60000;
@@ -277,55 +379,33 @@
   }
 
   function updateHeader() {
-    const now = new Date();
-    document.getElementById('datetime-header').textContent =
-      now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }) +
-      ' — ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    // header-sub já tem o texto fixo; podemos mostrar hora no título
   }
 
-  setDatetime('c-datetime');
-  setDatetime('d-datetime');
-  updateHeader();
-  setInterval(updateHeader, 30000);
-
-  // Tabs
   function switchTab(tab) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + tab).classList.add('active');
-    document.querySelectorAll('.tab')[['cautela','descautela','config'].indexOf(tab)].classList.add('active');
+    const idx = ['cautela','descautela','config'].indexOf(tab);
+    document.querySelectorAll('.tab')[idx].classList.add('active');
     if (tab === 'cautela') setDatetime('c-datetime');
-    if (tab === 'descautela') setDatetime('d-datetime');
   }
 
-  // Toast
   function showToast(msg, type) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 4000);
+    setTimeout(() => t.className = 'toast', 4500);
   }
 
-  // Config
-  function saveConfig() {
-    const url = document.getElementById('cfg-url').value.trim();
-    if (!url.startsWith('https://script.google.com') || !url.includes('/exec')) {
-      showToast('URL inválida. Deve terminar em /exec', 'error');
-      return;
-    }
-    localStorage.setItem('gms_script_url', url);
-    document.getElementById('url-status').innerHTML = '<span class="url-status-ok" style="display:inline-block;background:#E6F1FB;color:#0C447C;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;margin-top:6px;">URL salva com sucesso!</span>';
-    showToast('URL configurada! Sistema pronto para uso.', 'success');
+  function showLoading(msg) {
+    document.getElementById('loading-msg').innerHTML = msg || 'Enviando para<br>a planilha...';
+    document.getElementById('loading').classList.add('show');
   }
 
-  // Carregar URL salva
-  window.addEventListener('load', () => {
-    const saved = localStorage.getItem('gms_script_url');
-    if (saved) {
-      document.getElementById('cfg-url').value = saved;
-      document.getElementById('url-status').innerHTML = '<span style="display:inline-block;background:#E6F1FB;color:#0C447C;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;margin-top:6px;">URL configurada</span>';
-    }
-  });
+  function hideLoading() {
+    document.getElementById('loading').classList.remove('show');
+  }
 
   function getVal(id) {
     return document.getElementById(id)?.value?.trim() || '';
@@ -336,66 +416,224 @@
       const el = document.getElementById(prefix + '-' + f);
       if (el) el.value = '';
     });
-    document.getElementById(prefix + '-tipo-arma').value = '';
+    const ta = document.getElementById(prefix + '-tipo-arma');
+    if (ta) ta.value = '';
     setDatetime(prefix + '-datetime');
   }
 
-  async function submitForm(tipo) {
-    const p = tipo === 'cautela' ? 'c' : 'd';
+  // ===== SENHA CONFIG =====
+  function abrirConfig() {
+    document.getElementById('senha-overlay').style.display = 'flex';
+    document.getElementById('senha-input').value = '';
+    document.getElementById('senha-erro').style.display = 'none';
+    setTimeout(() => document.getElementById('senha-input').focus(), 100);
+  }
 
-    const nome      = getVal(p+'-nome');
-    const funcional = getVal(p+'-funcional');
-    const qra       = getVal(p+'-qra');
-    const tipoArma  = getVal(p+'-tipo-arma');
-    const numArma   = getVal(p+'-num-arma');
-    const tipoMun   = getVal(p+'-tipo-mun');
-    const qtdMun    = getVal(p+'-qtd-mun');
-    const armeiro   = getVal(p+'-armeiro');
-    const supervisor= getVal(p+'-supervisor');
-    const dt        = getVal(p+'-datetime');
+  function fecharSenha() {
+    document.getElementById('senha-overlay').style.display = 'none';
+  }
+
+  function verificarSenha() {
+    const senha = document.getElementById('senha-input').value;
+    if (senha === SENHA_CONFIG) {
+      fecharSenha();
+      switchTab('config');
+      const saved = localStorage.getItem('gms_script_url');
+      if (saved) {
+        document.getElementById('cfg-url').value = saved;
+        document.getElementById('cfg-status').textContent = 'URL configurada.';
+      }
+    } else {
+      document.getElementById('senha-erro').style.display = 'block';
+      document.getElementById('senha-input').value = '';
+      document.getElementById('senha-input').focus();
+    }
+  }
+
+  function saveConfig() {
+    const url = document.getElementById('cfg-url').value.trim();
+    if (!url.startsWith('https://script.google.com') || !url.includes('/exec')) {
+      showToast('URL inválida. Deve terminar em /exec', 'error');
+      return;
+    }
+    localStorage.setItem('gms_script_url', url);
+    document.getElementById('cfg-status').textContent = '✔ URL salva com sucesso!';
+    showToast('URL configurada com sucesso!', 'success');
+  }
+
+  // ===== ALTERAÇÕES =====
+  function checkAlteracao(el, fieldId) {
+    const original = camposComparacao[fieldId] || '';
+    el.classList.toggle('changed', el.value.trim() !== original && original !== '');
+    verificarAvisoAlteracao();
+  }
+
+  function verificarAvisoAlteracao() {
+    const tem = Object.keys(camposComparacao).some(fid => {
+      const el = document.getElementById(fid);
+      return el && el.classList.contains('changed');
+    });
+    document.getElementById('desc-aviso-alteracao').style.display = tem ? 'block' : 'none';
+  }
+
+  // ===== BUSCAR CAUTELA =====
+  async function buscarCautela() {
+    const funcional = getVal('d-busca-funcional');
+    if (!funcional) { showToast('Digite o N° Funcional para buscar', 'error'); return; }
+
+    showLoading('Buscando cautela<br>ativa...');
+    try {
+      const url = getScriptUrl() + '?acao=buscar&funcional=' + encodeURIComponent(funcional);
+      const resp = await fetch(url);
+      const data = await resp.json();
+      hideLoading();
+
+      if (data.status === 'ok' && data.cautela) {
+        preencherDescautela(data.cautela);
+      } else if (data.status === 'nao_encontrado') {
+        showToast('Nenhuma cautela ativa para este funcional.', 'error');
+        document.getElementById('desc-form').style.display = 'none';
+      } else {
+        showToast('Erro ao buscar. Tente novamente.', 'error');
+      }
+    } catch(e) {
+      hideLoading();
+      showToast('Erro de conexão ao buscar.', 'error');
+    }
+  }
+
+  function preencherDescautela(c) {
+    cautelaOriginal = c;
+    camposComparacao['d-nome']      = c.nome || '';
+    camposComparacao['d-qra']       = c.qra || '';
+    camposComparacao['d-tipo-arma'] = c.tipoArma || '';
+    camposComparacao['d-num-arma']  = c.numArma || '';
+    camposComparacao['d-tipo-mun']  = c.tipoMun || '';
+    camposComparacao['d-qtd-mun']   = c.qtdMun || '';
+
+    document.getElementById('d-nome').value      = c.nome || '';
+    document.getElementById('d-funcional').value = c.funcional || '';
+    document.getElementById('d-qra').value       = c.qra || '';
+    document.getElementById('d-num-arma').value  = c.numArma || '';
+    document.getElementById('d-tipo-mun').value  = c.tipoMun || '';
+    document.getElementById('d-qtd-mun').value   = c.qtdMun || '';
+    document.getElementById('d-obs').value       = '';
+
+    const sel = document.getElementById('d-tipo-arma');
+    for (let opt of sel.options) { if (opt.value === c.tipoArma) { opt.selected = true; break; } }
+
+    Object.keys(camposComparacao).forEach(fid => {
+      const el = document.getElementById(fid);
+      if (el) el.classList.remove('changed');
+    });
+
+    setDatetime('d-datetime');
+    document.getElementById('desc-aviso-alteracao').style.display = 'none';
+
+    document.getElementById('desc-card-encontrada').innerHTML = `
+      <div class="cautela-card">
+        <div class="cautela-card-title">Cautela Encontrada</div>
+        <div class="cautela-card-row"><span>Nome</span><span>${c.nome || '—'}</span></div>
+        <div class="cautela-card-row"><span>Funcional</span><span>${c.funcional || '—'}</span></div>
+        <div class="cautela-card-row"><span>QRA</span><span>${c.qra || '—'}</span></div>
+        <div class="cautela-card-row"><span>Armamento</span><span>${c.tipoArma || '—'} — ${c.numArma || '—'}</span></div>
+        <div class="cautela-card-row"><span>Munição</span><span>${c.qtdMun || '0'} × ${c.tipoMun || '—'}</span></div>
+        <div class="cautela-card-row"><span>Retirado em</span><span>${c.dataHora || '—'}</span></div>
+      </div>
+      <div class="info-box success">Cautela encontrada! Confirme os dados abaixo. Altere apenas o necessário.</div>
+    `;
+
+    document.getElementById('desc-form').style.display = 'block';
+    document.getElementById('desc-form').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ===== SUBMIT CAUTELA =====
+  async function submitCautela() {
+    const nome       = getVal('c-nome');
+    const funcional  = getVal('c-funcional');
+    const qra        = getVal('c-qra');
+    const tipoArma   = getVal('c-tipo-arma');
+    const numArma    = getVal('c-num-arma');
+    const tipoMun    = getVal('c-tipo-mun');
+    const qtdMun     = getVal('c-qtd-mun');
+    const armeiro    = getVal('c-armeiro');
+    const supervisor = getVal('c-supervisor');
+    const dt         = getVal('c-datetime');
 
     if (!nome || !funcional || !qra || !tipoArma || !numArma || !armeiro || !supervisor) {
       showToast('Preencha todos os campos obrigatórios (*)', 'error');
       return;
     }
 
-    const scriptUrl = localStorage.getItem('gms_script_url');
-    if (!scriptUrl) {
-      showToast('Configure a URL do Apps Script na aba Configurar', 'error');
-      return;
-    }
-
-    const payload = {
-      tipo: tipo === 'cautela' ? 'CAUTELA' : 'DESCAUTELA',
-      nome, funcional, qra,
-      tipoArma, numArma,
-      tipoMun, qtdMun,
-      armeiro, supervisor,
-      dataHora: dt.replace('T', ' ')
-    };
-
-    document.getElementById('loading').classList.add('show');
-
+    showLoading();
     try {
-      const response = await fetch(scriptUrl, {
+      await fetch(getScriptUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ tipo:'CAUTELA', nome, funcional, qra, tipoArma, numArma, tipoMun, qtdMun, armeiro, supervisor, dataHora: dt.replace('T',' '), alteracoes:'' })
       });
-
-      document.getElementById('loading').classList.remove('show');
-
-      if (response.ok || response.type === 'opaque') {
-        showToast(tipo === 'cautela' ? 'Cautela registrada na planilha!' : 'Descautela registrada na planilha!', 'success');
-        clearForm(p);
-      } else {
-        showToast('Erro ao enviar. Verifique a URL configurada.', 'error');
-      }
-    } catch (err) {
-      document.getElementById('loading').classList.remove('show');
+      hideLoading();
+      showToast('Cautela registrada na planilha!', 'success');
+      clearForm('c');
+    } catch(e) {
+      hideLoading();
       showToast('Erro de conexão. Verifique sua internet.', 'error');
     }
   }
+
+  // ===== SUBMIT DESCAUTELA =====
+  async function submitDescautela() {
+    const nome       = getVal('d-nome');
+    const funcional  = getVal('d-funcional');
+    const qra        = getVal('d-qra');
+    const tipoArma   = getVal('d-tipo-arma');
+    const numArma    = getVal('d-num-arma');
+    const tipoMun    = getVal('d-tipo-mun');
+    const qtdMun     = getVal('d-qtd-mun');
+    const armeiro    = getVal('d-armeiro');
+    const supervisor = getVal('d-supervisor');
+    const obs        = getVal('d-obs');
+    const dt         = getVal('d-datetime');
+
+    if (!armeiro || !supervisor) {
+      showToast('Informe o Armeiro e o Supervisor', 'error');
+      return;
+    }
+
+    // Detectar campos alterados automaticamente
+    const labels = { 'd-nome':'Nome', 'd-qra':'QRA', 'd-tipo-arma':'Tipo Arma', 'd-num-arma':'N° Arma', 'd-tipo-mun':'Tipo Munição', 'd-qtd-mun':'Qtd Munição' };
+    const autoAlteracoes = [];
+    Object.keys(camposComparacao).forEach(fid => {
+      const el = document.getElementById(fid);
+      if (el && el.classList.contains('changed')) {
+        autoAlteracoes.push(labels[fid] + ': ' + camposComparacao[fid] + ' → ' + el.value.trim());
+      }
+    });
+
+    // Combinar alterações automáticas + observações manuais
+    let alteracoesFinal = autoAlteracoes.join(' | ');
+    if (obs) alteracoesFinal = alteracoesFinal ? alteracoesFinal + ' | Obs: ' + obs : 'Obs: ' + obs;
+
+    showLoading();
+    try {
+      await fetch(getScriptUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ tipo:'DESCAUTELA', nome, funcional, qra, tipoArma, numArma, tipoMun, qtdMun, armeiro, supervisor, dataHora: dt.replace('T',' '), alteracoes: alteracoesFinal })
+      });
+      hideLoading();
+      showToast('Descautela registrada com sucesso!', 'success');
+      document.getElementById('desc-form').style.display = 'none';
+      document.getElementById('d-busca-funcional').value = '';
+      cautelaOriginal = null;
+    } catch(e) {
+      hideLoading();
+      showToast('Erro de conexão. Verifique sua internet.', 'error');
+    }
+  }
+
+  // ===== INIT =====
+  setDatetime('c-datetime');
 </script>
 </body>
 </html>
