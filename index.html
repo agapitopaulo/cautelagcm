@@ -11,7 +11,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; min-height: 100vh; }
 
-  /* HEADER */
   .header { background: linear-gradient(135deg, #0C447C 0%, #185FA5 60%, #1e72c0 100%); color: white; padding: 0.9rem 1.25rem 0.8rem; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 3px 12px rgba(0,0,0,0.25); }
   .header-inner { display: flex; align-items: center; justify-content: center; gap: 14px; }
   .brasao { width: 54px; height: 54px; flex-shrink: 0; }
@@ -20,7 +19,6 @@
   .header-main { font-size: 16px; font-weight: 700; margin: 1px 0; line-height: 1.2; }
   .header-sub { font-size: 11px; opacity: 0.72; }
 
-  /* TABS */
   .tabs { display: flex; background: #0C447C; }
   .tab { flex: 1; padding: 0.7rem 0.5rem; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; color: rgba(255,255,255,0.55); border-bottom: 3px solid transparent; transition: all 0.2s; letter-spacing: 0.03em; }
   .tab.active { color: white; border-bottom-color: #85B7EB; background: rgba(255,255,255,0.08); }
@@ -51,16 +49,32 @@
   .btn-descautela{ background: #A32D2D; color: white; }
   .btn-buscar { background: #378ADD; color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; }
   .btn-config { background: #185FA5; color: white; }
+  .btn-add-arma { background: #2E9E5B; color: white; border: none; border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn-add-arma:hover { background: #267a48; }
+  .btn-outline-danger { background: none; border: 1.5px solid #C0392B; color: #C0392B; border-radius: 6px; padding: 5px 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
 
   .tab-content { display: none; }
   .tab-content.active { display: block; }
 
-  .cautela-card { border: 2px solid #378ADD; border-radius: 10px; padding: 1rem; margin-bottom: 1rem; background: #f7fbff; }
-  .cautela-card-title { font-size: 12px; font-weight: 700; color: #185FA5; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px; }
-  .cautela-card-title::before { content: ''; display: inline-block; width: 8px; height: 8px; background: #2E9E5B; border-radius: 50%; }
-  .cautela-card-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #333; padding: 5px 0; border-bottom: 0.5px solid #dde3ea; }
-  .cautela-card-row span:first-child { color: #666; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-  .cautela-card-row span:last-child { font-weight: 700; }
+  /* LISTA DE ARMAS NA CAUTELA */
+  .armas-lista { margin-top: 0.5rem; }
+  .arma-item { border: 1.5px solid #dde3ea; border-radius: 8px; padding: 0.8rem; margin-bottom: 0.6rem; background: #f7fbff; position: relative; }
+  .arma-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+  .arma-item-title { font-size: 12px; font-weight: 700; color: #185FA5; text-transform: uppercase; }
+  .arma-badge { background: #185FA5; color: white; border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 700; }
+
+  /* LISTA DE ARMAS NA DESCAUTELA */
+  .desc-arma-selecao { border: 2px solid #dde3ea; border-radius: 10px; padding: 0.9rem; margin-bottom: 0.7rem; background: #f7fbff; cursor: pointer; transition: all 0.2s; }
+  .desc-arma-selecao.selecionada { border-color: #A32D2D; background: #FFF0F0; }
+  .desc-arma-selecao-header { display: flex; align-items: center; gap: 10px; }
+  .desc-arma-checkbox { width: 20px; height: 20px; accent-color: #A32D2D; flex-shrink: 0; cursor: pointer; }
+  .desc-arma-info { flex: 1; }
+  .desc-arma-titulo { font-size: 13px; font-weight: 700; color: #1a1a2e; }
+  .desc-arma-sub { font-size: 11px; color: #666; margin-top: 2px; }
+  .desc-arma-badge { font-size: 10px; background: #E6F7EF; color: #1A5C35; border-radius: 4px; padding: 2px 6px; font-weight: 700; }
+
+  .total-badge { background: #185FA5; color: white; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+  .total-badge.vermelho { background: #A32D2D; }
 
   /* Overlay e Senha */
   .senha-overlay { position: fixed; inset: 0; background: rgba(12,68,124,0.6); z-index: 300; display: none; align-items: center; justify-content: center; }
@@ -80,6 +94,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   #desc-form { display: none; }
+  .divider { border: none; border-top: 1.5px dashed #dde3ea; margin: 0.8rem 0; }
 </style>
 </head>
 <body>
@@ -107,9 +122,10 @@
 
 <div class="container">
 
+  <!-- ===================== ABA CAUTELA ===================== -->
   <div class="tab-content active" id="tab-cautela">
     <div class="form-card">
-      <div class="info-box">Preencha todos os campos para registrar a retirada do armamento.</div>
+      <div class="info-box">Preencha os dados do servidor e adicione quantas armas quiser antes de registrar.</div>
 
       <div class="section-label">Identificação do Servidor</div>
       <div class="field">
@@ -124,35 +140,6 @@
         <div class="field">
           <label>QRA *</label>
           <input type="text" id="c-qra" placeholder="Ex: QRA-01">
-        </div>
-      </div>
-
-      <div class="section-label">Armamento</div>
-      <div class="field">
-        <label>Tipo de Armamento *</label>
-        <select id="c-tipo-arma">
-          <option value="">Selecione...</option>
-          <option>Pistola</option>
-          <option>Carabina</option>
-          <option>Espingarda</option>
-          <option>Fuzil</option>
-          <option>Outros</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Número do Armamento *</label>
-        <input type="text" id="c-num-arma" placeholder="Ex: PA-0001">
-      </div>
-
-      <div class="section-label">Munição</div>
-      <div class="row2">
-        <div class="field">
-          <label>Tipo de Munição</label>
-          <input type="text" id="c-tipo-mun" placeholder="Ex: .40">
-        </div>
-        <div class="field">
-          <label>Quantidade</label>
-          <input type="number" id="c-qtd-mun" placeholder="Ex: 15" inputmode="numeric">
         </div>
       </div>
 
@@ -171,33 +158,83 @@
         <label>Data e Hora da Cautela *</label>
         <input type="datetime-local" id="c-datetime">
       </div>
+    </div>
 
-      <button class="btn btn-cautela" onclick="submitCautela()">✔ Registrar Cautela</button>
+    <!-- CARD DE ADIÇÃO DE ARMAS -->
+    <div class="form-card">
+      <div class="section-label">➕ Adicionar Armamento</div>
+      <div class="field">
+        <label>Tipo de Armamento *</label>
+        <select id="c-tipo-arma">
+          <option value="">Selecione...</option>
+          <option>Pistola</option>
+          <option>Carabina</option>
+          <option>Espingarda</option>
+          <option>Fuzil</option>
+          <option>Outros</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Número do Armamento *</label>
+        <input type="text" id="c-num-arma" placeholder="Ex: PA-0001">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Tipo de Munição</label>
+          <input type="text" id="c-tipo-mun" placeholder="Ex: .40">
+        </div>
+        <div class="field">
+          <label>Quantidade</label>
+          <input type="number" id="c-qtd-mun" placeholder="Ex: 15" inputmode="numeric">
+        </div>
+      </div>
+      <button class="btn-add-arma" onclick="adicionarArma()">
+        <span style="font-size:18px">+</span> Adicionar Arma à Lista
+      </button>
+    </div>
+
+    <!-- LISTA DE ARMAS ADICIONADAS -->
+    <div id="c-lista-container" style="display:none;">
+      <div class="form-card">
+        <div class="section-label">📋 Armas na Cautela</div>
+        <div id="c-armas-lista" class="armas-lista"></div>
+        <div id="c-total-badge" class="total-badge">0 arma(s) adicionada(s)</div>
+        <hr class="divider">
+        <button class="btn btn-cautela" onclick="submitCautela()">✔ Registrar Cautela Completa</button>
+      </div>
     </div>
   </div>
 
+  <!-- ===================== ABA DESCAUTELA ===================== -->
   <div class="tab-content" id="tab-descautela">
     <div class="form-card">
-      <div class="info-box">Digite o N° Funcional para buscar a cautela ativa.</div>
+      <div class="info-box">Digite o N° Funcional para buscar todas as cautelas ativas do servidor.</div>
       <div class="field">
         <label>N° Funcional *</label>
         <input type="text" id="d-busca-funcional" inputmode="numeric" placeholder="Ex: 12345">
       </div>
-      <button class="btn-buscar" onclick="buscarCautela()">🔍 Buscar Cautela</button>
+      <button class="btn-buscar" onclick="buscarCautela()">🔍 Buscar Cautelas Ativas</button>
     </div>
 
     <div id="desc-form">
-      <div id="desc-card-encontrada"></div>
-
+      <!-- SELEÇÃO DE ARMAS -->
       <div class="form-card">
-        <div class="info-box warning" id="desc-aviso-alteracao" style="display:none">
+        <div class="info-box">Selecione a(s) arma(s) que serão devolvidas:</div>
+        <div class="section-label">Armas em Cautela Ativa</div>
+        <div id="desc-armas-selecao"></div>
+        <div id="desc-total-sel" class="total-badge vermelho" style="display:none;"></div>
+      </div>
+
+      <!-- DADOS DA DEVOLUÇÃO -->
+      <div class="form-card" id="desc-dados-form" style="display:none;">
+        <div class="section-label">Dados da Devolução</div>
+        <div class="info-box warning" id="desc-aviso-alteracao" style="display:none;">
           Campos em amarelo foram alterados.
         </div>
 
-        <div class="section-label">Dados de Devolução</div>
         <div class="field">
           <label>Nome Completo</label>
-          <input type="text" id="d-nome" oninput="checkAlteracao(this,'d-nome')">
+          <input type="text" id="d-nome" readonly>
         </div>
         <div class="row2">
           <div class="field">
@@ -206,29 +243,7 @@
           </div>
           <div class="field">
             <label>QRA</label>
-            <input type="text" id="d-qra" oninput="checkAlteracao(this,'d-qra')">
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Tipo de Armamento</label>
-          <select id="d-tipo-arma" onchange="checkAlteracao(this,'d-tipo-arma')">
-            <option>Pistola</option><option>Carabina</option><option>Espingarda</option><option>Fuzil</option><option>Outros</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Número do Armamento</label>
-          <input type="text" id="d-num-arma" oninput="checkAlteracao(this,'d-num-arma')">
-        </div>
-
-        <div class="row2">
-          <div class="field">
-            <label>Tipo Munição</label>
-            <input type="text" id="d-tipo-mun" oninput="checkAlteracao(this,'d-tipo-mun')">
-          </div>
-          <div class="field">
-            <label>Qtd Devolvida</label>
-            <input type="number" id="d-qtd-mun" oninput="checkAlteracao(this,'d-qtd-mun')">
+            <input type="text" id="d-qra" readonly>
           </div>
         </div>
 
@@ -257,6 +272,7 @@
     </div>
   </div>
 
+  <!-- ===================== ABA CONFIG ===================== -->
   <div class="tab-content" id="tab-config">
     <div class="form-card">
       <div class="section-label">URL do Script</div>
@@ -270,6 +286,7 @@
 
 </div>
 
+<!-- SENHA OVERLAY -->
 <div class="senha-overlay" id="senha-overlay">
   <div class="senha-box">
     <h3>🔒 Área Restrita</h3>
@@ -287,18 +304,18 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // CONFIGURAÇÕES INICIAIS
   const SENHA_CONFIG = '270466';
-  let cautelaOriginal = null;
-  let linhaAtualParaDescautela = null; // ARMAZENA A LINHA DA PLANILHA
 
-  const camposComparacao = { 'd-nome':'', 'd-qra':'', 'd-tipo-arma':'', 'd-num-arma':'', 'd-tipo-mun':'', 'd-qtd-mun':'' };
+  // ESTADO DA CAUTELA: lista de armas a serem registradas
+  let armasCautela = [];
 
-  function getScriptUrl() {
-    return localStorage.getItem('gms_script_url') || '';
-  }
+  // ESTADO DA DESCAUTELA: cautelas encontradas
+  let cautelasEncontradas = []; // array de objetos {linha, tipoArma, numArma, tipoMun, qtdMun, dataHora, nome, funcional, qra}
+  let servidorEncontrado = {};
 
-  // HELPERS
+  // ======== HELPERS ========
+  function getScriptUrl() { return localStorage.getItem('gms_script_url') || ''; }
+
   function setDatetime(id) {
     const now = new Date();
     const offset = now.getTimezoneOffset() * 60000;
@@ -306,40 +323,37 @@
     document.getElementById(id).value = local.toISOString().slice(0, 16);
   }
 
-  function switchTab(tab) {
-    document.querySelectorAll('.tab-content, .tab').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
-    const tabs = document.querySelectorAll('.tab');
-    if(tab==='cautela') { tabs[0].classList.add('active'); setDatetime('c-datetime'); }
-    if(tab==='descautela') tabs[1].classList.add('active');
-    if(tab==='config') tabs[2].classList.add('active');
-  }
-
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast show ' + type;
-    setTimeout(() => t.className = 'toast', 3000);
-  }
+  function getVal(id) { return document.getElementById(id)?.value?.trim() || ''; }
 
   function showLoading(msg) {
     document.getElementById('loading-msg').textContent = msg || 'Enviando...';
     document.getElementById('loading').classList.add('show');
   }
-
   function hideLoading() { document.getElementById('loading').classList.remove('show'); }
 
-  function getVal(id) { return document.getElementById(id)?.value?.trim() || ''; }
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast', 3500);
+  }
 
-  // CONFIGURAÇÃO E SENHA
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content, .tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    const tabs = document.querySelectorAll('.tab');
+    if (tab === 'cautela') { tabs[0].classList.add('active'); setDatetime('c-datetime'); }
+    if (tab === 'descautela') tabs[1].classList.add('active');
+    if (tab === 'config') tabs[2].classList.add('active');
+  }
+
+  // ======== CONFIG ========
   function abrirConfig() {
     document.getElementById('senha-overlay').style.display = 'flex';
     document.getElementById('senha-input').value = '';
     document.getElementById('senha-erro').style.display = 'none';
   }
-
   function fecharSenha() { document.getElementById('senha-overlay').style.display = 'none'; }
-
   function verificarSenha() {
     if (getVal('senha-input') === SENHA_CONFIG) {
       fecharSenha();
@@ -349,7 +363,6 @@
       document.getElementById('senha-erro').style.display = 'block';
     }
   }
-
   function saveConfig() {
     const url = getVal('cfg-url');
     if (!url.includes('/exec')) return showToast('URL inválida', 'error');
@@ -357,28 +370,146 @@
     showToast('URL Salva!', 'success');
   }
 
-  // LÓGICA DE ALTERAÇÃO
-  function checkAlteracao(el, fieldId) {
-    const original = String(camposComparacao[fieldId]);
-    el.classList.toggle('changed', el.value !== original && original !== '');
-    const temAlteracao = Object.keys(camposComparacao).some(id => document.getElementById(id).classList.contains('changed'));
-    document.getElementById('desc-aviso-alteracao').style.display = temAlteracao ? 'block' : 'none';
+  // ======== CAUTELA: GERENCIAMENTO DA LISTA DE ARMAS ========
+  function adicionarArma() {
+    const tipo = getVal('c-tipo-arma');
+    const num  = getVal('c-num-arma');
+    if (!tipo) return showToast('Selecione o tipo de armamento', 'error');
+    if (!num)  return showToast('Informe o número do armamento', 'error');
+
+    // Verificar duplicata
+    if (armasCautela.find(a => a.numArma === num)) {
+      return showToast(`Arma ${num} já está na lista`, 'error');
+    }
+
+    armasCautela.push({
+      tipoArma: tipo,
+      numArma:  num,
+      tipoMun:  getVal('c-tipo-mun'),
+      qtdMun:   getVal('c-qtd-mun')
+    });
+
+    // Limpar campos de arma
+    document.getElementById('c-tipo-arma').value = '';
+    document.getElementById('c-num-arma').value = '';
+    document.getElementById('c-tipo-mun').value = '';
+    document.getElementById('c-qtd-mun').value = '';
+
+    renderizarListaCautela();
+    showToast(`${tipo} ${num} adicionada!`, 'success');
   }
 
-  // BUSCA
+  function removerArma(idx) {
+    armasCautela.splice(idx, 1);
+    renderizarListaCautela();
+  }
+
+  function renderizarListaCautela() {
+    const container = document.getElementById('c-lista-container');
+    const lista     = document.getElementById('c-armas-lista');
+    const badge     = document.getElementById('c-total-badge');
+
+    if (armasCautela.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+    container.style.display = 'block';
+    badge.textContent = `${armasCautela.length} arma(s) adicionada(s)`;
+
+    lista.innerHTML = armasCautela.map((a, i) => `
+      <div class="arma-item">
+        <div class="arma-item-header">
+          <span class="arma-item-title">🔫 ${a.tipoArma} — ${a.numArma}</span>
+          <button class="btn-outline-danger" onclick="removerArma(${i})">✕ Remover</button>
+        </div>
+        ${a.tipoMun ? `<div style="font-size:12px;color:#555;">Munição: <strong>${a.tipoMun}</strong> — Qtd: <strong>${a.qtdMun || '—'}</strong></div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // ======== CAUTELA: SUBMIT ========
+  async function submitCautela() {
+    const nome       = getVal('c-nome');
+    const funcional  = getVal('c-funcional');
+    const qra        = getVal('c-qra');
+    const armeiro    = getVal('c-armeiro');
+    const supervisor = getVal('c-supervisor');
+    const dataHora   = getVal('c-datetime').replace('T', ' ');
+
+    if (!nome || !funcional || !qra)         return showToast('Preencha nome, funcional e QRA', 'error');
+    if (!armeiro || !supervisor)             return showToast('Informe armeiro e supervisor', 'error');
+    if (armasCautela.length === 0)           return showToast('Adicione ao menos uma arma', 'error');
+    if (!getScriptUrl())                     return showToast('Configure a URL na aba Config', 'error');
+
+    // Montar um registro por arma
+    const registros = armasCautela.map(a => ({
+      tipo: 'CAUTELA',
+      nome, funcional, qra,
+      tipoArma:  a.tipoArma,
+      numArma:   a.numArma,
+      tipoMun:   a.tipoMun,
+      qtdMun:    a.qtdMun,
+      armeiro, supervisor, dataHora
+    }));
+
+    showLoading(`Salvando ${registros.length} arma(s)...`);
+    try {
+      // Envia array de registros
+      await fetch(getScriptUrl(), {
+        method: 'POST',
+        body: JSON.stringify({ tipo: 'CAUTELA_LOTE', registros })
+      });
+      hideLoading();
+      showToast(`${registros.length} cautela(s) registrada(s)!`, 'success');
+
+      // Limpar tudo
+      armasCautela = [];
+      renderizarListaCautela();
+      ['c-nome','c-funcional','c-qra','c-armeiro','c-supervisor'].forEach(id => document.getElementById(id).value = '');
+      setDatetime('c-datetime');
+    } catch (e) {
+      hideLoading();
+      showToast('Erro ao salvar', 'error');
+    }
+  }
+
+  // ======== DESCAUTELA: BUSCA ========
   async function buscarCautela() {
     const func = getVal('d-busca-funcional');
     if (!func) return showToast('Informe o funcional', 'error');
     if (!getScriptUrl()) return showToast('Configure a URL na aba Config', 'error');
 
-    showLoading('Buscando...');
+    showLoading('Buscando cautelas ativas...');
     try {
       const resp = await fetch(`${getScriptUrl()}?acao=buscar&funcional=${func}`);
       const data = await resp.json();
       hideLoading();
 
       if (data.status === 'ok') {
-        preencherDescautela(data.cautela);
+        // Suporte a múltiplas cautelas (array) ou cautela única (retrocompatível)
+        if (Array.isArray(data.cautelas) && data.cautelas.length > 0) {
+          cautelasEncontradas = data.cautelas;
+        } else if (data.cautela) {
+          cautelasEncontradas = [data.cautela]; // retrocompatível com script antigo
+        } else {
+          cautelasEncontradas = [];
+        }
+
+        if (cautelasEncontradas.length === 0) {
+          showToast('Nenhuma cautela ativa encontrada.', 'error');
+          document.getElementById('desc-form').style.display = 'none';
+          return;
+        }
+
+        servidorEncontrado = {
+          nome:      cautelasEncontradas[0].nome,
+          funcional: cautelasEncontradas[0].funcional,
+          qra:       cautelasEncontradas[0].qra
+        };
+
+        renderizarSelecaoDescautela();
+        document.getElementById('desc-form').style.display = 'block';
+
       } else {
         showToast('Nenhuma cautela ativa encontrada.', 'error');
         document.getElementById('desc-form').style.display = 'none';
@@ -389,96 +520,117 @@
     }
   }
 
-  function preencherDescautela(c) {
-    cautelaOriginal = c;
-    linhaAtualParaDescautela = c.linha; // SALVA A LINHA PARA O SUBMIT
+  function renderizarSelecaoDescautela() {
+    const container = document.getElementById('desc-armas-selecao');
+    container.innerHTML = cautelasEncontradas.map((c, i) => `
+      <div class="desc-arma-selecao" id="sel-card-${i}" onclick="toggleSelecao(${i})">
+        <div class="desc-arma-selecao-header">
+          <input type="checkbox" class="desc-arma-checkbox" id="sel-check-${i}" onchange="atualizarContadorSelecao()">
+          <div class="desc-arma-info">
+            <div class="desc-arma-titulo">🔫 ${c.tipoArma} — ${c.numArma}</div>
+            <div class="desc-arma-sub">
+              ${c.tipoMun ? `Munição: ${c.tipoMun} (${c.qtdMun || 0} un.)` : 'Sem munição registrada'}
+              &nbsp;|&nbsp; Retirada: ${c.dataHora || '—'}
+            </div>
+          </div>
+          <span class="desc-arma-badge">Linha ${c.linha}</span>
+        </div>
+      </div>
+    `).join('');
 
-    const campos = ['nome','funcional','qra','tipo-arma','num-arma','tipo-mun','qtd-mun'];
-    campos.forEach(f => {
-      const id = 'd-' + f;
-      const valor = c[f.replace(/-([a-z])/g, g => g[1].toUpperCase())] || '';
-      document.getElementById(id).value = valor;
-      if(camposComparacao.hasOwnProperty(id)) camposComparacao[id] = valor;
-      document.getElementById(id).classList.remove('changed');
-    });
-
+    // Preencher dados do servidor
+    document.getElementById('d-nome').value      = servidorEncontrado.nome || '';
+    document.getElementById('d-funcional').value = servidorEncontrado.funcional || '';
+    document.getElementById('d-qra').value       = servidorEncontrado.qra || '';
     setDatetime('d-datetime');
-    document.getElementById('desc-card-encontrada').innerHTML = `
-      <div class="cautela-card">
-        <div class="cautela-card-title">Cautela Encontrada (Linha ${c.linha})</div>
-        <div class="cautela-card-row"><span>Material</span><span>${c.tipoArma} - ${c.numArma}</span></div>
-        <div class="cautela-card-row"><span>Data Retirada</span><span>${c.dataHora}</span></div>
-      </div>`;
-    document.getElementById('desc-form').style.display = 'block';
+
+    document.getElementById('desc-dados-form').style.display = 'none';
+    document.getElementById('desc-total-sel').style.display = 'none';
+    atualizarContadorSelecao();
   }
 
-  // SUBMIT CAUTELA
-  async function submitCautela() {
-    const dados = {
-      tipo: 'CAUTELA',
-      nome: getVal('c-nome'),
-      funcional: getVal('c-funcional'),
-      qra: getVal('c-qra'),
-      tipoArma: getVal('c-tipo-arma'),
-      numArma: getVal('c-num-arma'),
-      tipoMun: getVal('c-tipo-mun'),
-      qtdMun: getVal('c-qtd-mun'),
-      armeiro: getVal('c-armeiro'),
-      supervisor: getVal('c-supervisor'),
-      dataHora: getVal('c-datetime').replace('T', ' ')
-    };
+  function toggleSelecao(idx) {
+    const cb = document.getElementById(`sel-check-${idx}`);
+    cb.checked = !cb.checked;
+    atualizarContadorSelecao();
+  }
 
-    if (!dados.nome || !dados.funcional || !dados.numArma) return showToast('Preencha os obrigatórios', 'error');
+  function atualizarContadorSelecao() {
+    let total = 0;
+    cautelasEncontradas.forEach((_, i) => {
+      const cb   = document.getElementById(`sel-check-${i}`);
+      const card = document.getElementById(`sel-card-${i}`);
+      if (cb && cb.checked) {
+        total++;
+        card.classList.add('selecionada');
+      } else if (card) {
+        card.classList.remove('selecionada');
+      }
+    });
 
-    showLoading('Salvando...');
-    try {
-      await fetch(getScriptUrl(), { method: 'POST', body: JSON.stringify(dados) });
-      hideLoading();
-      showToast('Registrado!', 'success');
-      ['c-nome','c-funcional','c-qra','c-num-arma','c-tipo-mun','c-qtd-mun'].forEach(id => document.getElementById(id).value = '');
-    } catch (e) {
-      hideLoading();
-      showToast('Erro ao salvar', 'error');
+    const badge = document.getElementById('desc-total-sel');
+    const dadosForm = document.getElementById('desc-dados-form');
+    if (total > 0) {
+      badge.textContent = `${total} arma(s) selecionada(s) para devolução`;
+      badge.style.display = 'block';
+      dadosForm.style.display = 'block';
+    } else {
+      badge.style.display = 'none';
+      dadosForm.style.display = 'none';
     }
   }
 
-  // SUBMIT DESCAUTELA
-  async function submitDescautela() {
-    const labels = { 'd-nome':'Nome', 'd-qra':'QRA', 'd-tipo-arma':'Tipo', 'd-num-arma':'Nº', 'd-tipo-mun':'Mun', 'd-qtd-mun':'Qtd' };
-    let alteracoes = [];
-    Object.keys(camposComparacao).forEach(id => {
-      const el = document.getElementById(id);
-      if (el.classList.contains('changed')) alteracoes.push(`${labels[id]}: ${camposComparacao[id]}->${el.value}`);
+  function getSelecionadas() {
+    return cautelasEncontradas.filter((_, i) => {
+      const cb = document.getElementById(`sel-check-${i}`);
+      return cb && cb.checked;
     });
-    
-    const obsManual = getVal('d-obs');
-    const alteracoesFinal = alteracoes.join(' | ') + (obsManual ? ' | Obs: ' + obsManual : '');
+  }
 
-    const dados = {
-      tipo: 'DESCAUTELA',
-      linha: linhaAtualParaDescautela, // ENVIANDO A LINHA GUARDADA NA BUSCA
-      nome: getVal('d-nome'),
-      funcional: getVal('d-funcional'),
-      qra: getVal('d-qra'),
-      tipoArma: getVal('d-tipo-arma'),
-      numArma: getVal('d-num-arma'),
-      tipoMun: getVal('d-tipo-mun'),
-      qtdMun: getVal('d-qtd-mun'),
-      armeiro: getVal('d-armeiro'),
-      supervisor: getVal('d-supervisor'),
-      dataHora: getVal('d-datetime').replace('T', ' '),
-      alteracoes: alteracoesFinal
-    };
+  // ======== DESCAUTELA: SUBMIT ========
+  async function submitDescautela() {
+    const selecionadas = getSelecionadas();
+    if (selecionadas.length === 0) return showToast('Selecione ao menos uma arma', 'error');
 
-    if (!dados.armeiro || !dados.supervisor) return showToast('Informe os responsáveis', 'error');
+    const armeiro    = getVal('d-armeiro');
+    const supervisor = getVal('d-supervisor');
+    const dataHora   = getVal('d-datetime').replace('T', ' ');
+    const obs        = getVal('d-obs');
 
-    showLoading('Finalizando...');
+    if (!armeiro || !supervisor) return showToast('Informe armeiro e supervisor', 'error');
+    if (!getScriptUrl())         return showToast('Configure a URL na aba Config', 'error');
+
+    // Um registro de descautela por arma selecionada
+    const registros = selecionadas.map(c => ({
+      linha:     c.linha,
+      nome:      c.nome      || servidorEncontrado.nome,
+      funcional: c.funcional || servidorEncontrado.funcional,
+      qra:       c.qra       || servidorEncontrado.qra,
+      tipoArma:  c.tipoArma,
+      numArma:   c.numArma,
+      tipoMun:   c.tipoMun,
+      qtdMun:    c.qtdMun,
+      armeiro, supervisor, dataHora,
+      alteracoes: obs ? `Obs: ${obs}` : ''
+    }));
+
+    showLoading(`Devolvendo ${registros.length} arma(s)...`);
     try {
-      await fetch(getScriptUrl(), { method: 'POST', body: JSON.stringify(dados) });
+      await fetch(getScriptUrl(), {
+        method: 'POST',
+        body: JSON.stringify({ tipo: 'DESCAUTELA_LOTE', registros })
+      });
       hideLoading();
-      showToast('Devolvido com sucesso!', 'success');
+      showToast(`${registros.length} arma(s) devolvida(s)!`, 'success');
+
+      // Reset
       document.getElementById('desc-form').style.display = 'none';
       document.getElementById('d-busca-funcional').value = '';
+      document.getElementById('d-armeiro').value = '';
+      document.getElementById('d-supervisor').value = '';
+      document.getElementById('d-obs').value = '';
+      cautelasEncontradas = [];
+      servidorEncontrado = {};
       switchTab('cautela');
     } catch (e) {
       hideLoading();
@@ -486,7 +638,6 @@
     }
   }
 
-  // Iniciar data atual ao abrir
   window.onload = () => setDatetime('c-datetime');
 </script>
 
