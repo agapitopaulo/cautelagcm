@@ -117,7 +117,7 @@
 <div class="tabs">
   <div class="tab active" onclick="switchTab('cautela')">⚙ Cautela</div>
   <div class="tab" onclick="switchTab('descautela')">↩ Descautela</div>
-  <div class="tab" onclick="abrirConfig()">🔒 Config</div>
+
 </div>
 
 <div class="container">
@@ -272,30 +272,11 @@
     </div>
   </div>
 
-  <!-- ===================== ABA CONFIG ===================== -->
-  <div class="tab-content" id="tab-config">
-    <div class="form-card">
-      <div class="section-label">URL do Script</div>
-      <div class="field">
-        <input type="url" id="cfg-url" placeholder="https://script.google.com/...">
-      </div>
-      <button class="btn btn-config" onclick="saveConfig()">Salvar URL</button>
-      <div id="cfg-status" style="margin-top:10px; font-size:12px; color:green;"></div>
-    </div>
-  </div>
+
 
 </div>
 
-<!-- SENHA OVERLAY -->
-<div class="senha-overlay" id="senha-overlay">
-  <div class="senha-box">
-    <h3>🔒 Área Restrita</h3>
-    <input type="password" id="senha-input" placeholder="Senha">
-    <div class="senha-erro" id="senha-erro">Senha incorreta</div>
-    <button class="btn btn-cautela" onclick="verificarSenha()">Entrar</button>
-    <button onclick="fecharSenha()" style="background:none; border:none; color:#888; margin-top:10px; cursor:pointer;">Cancelar</button>
-  </div>
-</div>
+
 
 <div class="overlay" id="loading">
   <div class="spinner-box"><div class="spinner"></div><p id="loading-msg">Processando...</p></div>
@@ -304,9 +285,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const SENHA_CONFIG = '270466';
-
-  // ESTADO DA CAUTELA: lista de armas a serem registradas
+// ESTADO DA CAUTELA: lista de armas a serem registradas
   let armasCautela = [];
 
   // ESTADO DA DESCAUTELA: cautelas encontradas
@@ -314,7 +293,7 @@
   let servidorEncontrado = {};
 
   // ======== HELPERS ========
-  function getScriptUrl() { return localStorage.getItem('gms_script_url') || ''; }
+  function getScriptUrl() { return 'https://script.google.com/macros/s/AKfycbzAEWIS6E1dng8vFL7_pmsYczkghuu137nCMnTh5ECl0oUY44FP6sl_QioNP3Gfa9oo/exec'; }
 
   function setDatetime(id) {
     const now = new Date();
@@ -347,28 +326,7 @@
     if (tab === 'config') tabs[2].classList.add('active');
   }
 
-  // ======== CONFIG ========
-  function abrirConfig() {
-    document.getElementById('senha-overlay').style.display = 'flex';
-    document.getElementById('senha-input').value = '';
-    document.getElementById('senha-erro').style.display = 'none';
-  }
-  function fecharSenha() { document.getElementById('senha-overlay').style.display = 'none'; }
-  function verificarSenha() {
-    if (getVal('senha-input') === SENHA_CONFIG) {
-      fecharSenha();
-      switchTab('config');
-      document.getElementById('cfg-url').value = getScriptUrl();
-    } else {
-      document.getElementById('senha-erro').style.display = 'block';
-    }
-  }
-  function saveConfig() {
-    const url = getVal('cfg-url');
-    if (!url.includes('/exec')) return showToast('URL inválida', 'error');
-    localStorage.setItem('gms_script_url', url);
-    showToast('URL Salva!', 'success');
-  }
+
 
   // ======== CAUTELA: GERENCIAMENTO DA LISTA DE ARMAS ========
   function adicionarArma() {
