@@ -196,67 +196,19 @@
   </div>
 </div>
 
-<div id="user-info" style="display: flex;">
-  <span id="user-label">👤 admin</span>
-  <button class="icon-btn" id="admin-btn" onclick="openAdmin()" style="display: inline-block;">⚙ Usuários</button>
+<div id="user-info" style="display: none;">
+  <span id="user-label">👤</span>
+  <button class="icon-btn" id="admin-btn" onclick="openAdmin()" style="display: none;">⚙ Usuários</button>
   <button class="icon-btn logout-btn" onclick="doLogout()">Sair</button>
 </div>
 
-<div id="admin-modal" class="open">
+<div id="admin-modal" class="">
   <div class="admin-box">
     <button class="close-admin" onclick="closeAdmin()">✕</button>
     <h3>⚙ Gerenciar Usuários</h3>
     <table class="admin-table">
       <thead><tr><th>Usuário</th><th>Perfil</th><th>Ações</th></tr></thead>
-      <tbody id="users-tbody">
-    <tr>
-      <td>admin</td>
-      <td><span class="badge-admin">Admin</span></td>
-      <td>
-        <button class="pwd-btn" onclick="promptChangePwd('admin')">🔑 Senha</button>
-        <span style="color:rgba(255,255,255,0.3);font-size:11px;">você</span>
-      </td>
-    </tr>
-    <tr>
-      <td>guarda1</td>
-      <td><span class="badge-user">Guarda</span></td>
-      <td>
-        <button class="pwd-btn" onclick="promptChangePwd('guarda1')">🔑 Senha</button>
-        <button class="del-btn" onclick="deleteUser('guarda1')">🗑 Remover</button>
-      </td>
-    </tr>
-    <tr>
-      <td>guarda2</td>
-      <td><span class="badge-user">Guarda</span></td>
-      <td>
-        <button class="pwd-btn" onclick="promptChangePwd('guarda2')">🔑 Senha</button>
-        <button class="del-btn" onclick="deleteUser('guarda2')">🗑 Remover</button>
-      </td>
-    </tr>
-    <tr>
-      <td>guarda3</td>
-      <td><span class="badge-user">Guarda</span></td>
-      <td>
-        <button class="pwd-btn" onclick="promptChangePwd('guarda3')">🔑 Senha</button>
-        <button class="del-btn" onclick="deleteUser('guarda3')">🗑 Remover</button>
-      </td>
-    </tr>
-    <tr>
-      <td>supervisor</td>
-      <td><span class="badge-admin">Admin</span></td>
-      <td>
-        <button class="pwd-btn" onclick="promptChangePwd('supervisor')">🔑 Senha</button>
-        <button class="del-btn" onclick="deleteUser('supervisor')">🗑 Remover</button>
-      </td>
-    </tr>
-    <tr>
-      <td>scalzer</td>
-      <td><span class="badge-user">Guarda</span></td>
-      <td>
-        <button class="pwd-btn" onclick="promptChangePwd('scalzer')">🔑 Senha</button>
-        <button class="del-btn" onclick="deleteUser('scalzer')">🗑 Remover</button>
-      </td>
-    </tr></tbody>
+      <tbody id="users-tbody"></tbody>
     </table>
     <div class="admin-section">
       <h4>Adicionar / Alterar Usuário</h4>
@@ -271,7 +223,7 @@
       <div class="admin-row">
         <button class="add-btn" onclick="addUser()">➕ Salvar Usuário</button>
       </div>
-      <div class="admin-msg ok" id="admin-msg">Usuário "scalzer" criado!</div>
+      <div class="admin-msg" id="admin-msg"></div>
     </div>
     <button class="export-btn" onclick="exportHTML()">⬇ Exportar HTML com usuários atualizados</button>
   </div>
@@ -890,12 +842,21 @@ function deleteUser(username) {
 function exportHTML() {
   const users = loadUsers();
   const usersJson = JSON.stringify(users);
-  const html = document.documentElement.outerHTML;
-  const updated = html.replace(
+  let html = document.documentElement.outerHTML;
+
+  // Garante estado limpo no HTML exportado
+  html = html.replace(/id="login-screen"[^>]*style="[^"]*"/,  'id="login-screen" style="display:flex;"');
+  html = html.replace(/id="user-info"[^>]*style="[^"]*"/,     'id="user-info" style="display:none;"');
+  html = html.replace(/id="admin-btn"[^>]*style="[^"]*"/,     'id="admin-btn" style="display:none;"');
+  html = html.replace(/id="admin-modal" class="[^"]*"/,       'id="admin-modal" class=""');
+  html = html.replace(/(<span id="user-label">)[^<]*/,        '$1👤');
+  html = html.replace(/(<tbody id="users-tbody">)[\s\S]*?(<\/tbody>)/, '$1$2');
+
+  html = html.replace(
     /const DEFAULT_USERS = \[.*?\];/s,
     'const DEFAULT_USERS = ' + usersJson + ';'
   );
-  const blob = new Blob([updated], {type:'text/html'});
+  const blob = new Blob([html], {type:'text/html'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'index.html';
