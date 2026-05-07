@@ -174,12 +174,19 @@
 
 </style>
 <script>
-  if (localStorage.getItem('gcm_session_user')) {
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('login-screen').style.display = 'none';
-    });
-    document.write('<style>#login-screen{display:none!important}</style>');
-  }
+  (function() {
+    var u = localStorage.getItem('gcm_session_user');
+    var role = localStorage.getItem('gcm_session_role');
+    if (u) {
+      // Sessão válida: esconde login, garante que admin-modal nunca apareça no load
+      document.write('<style>#login-screen{display:none!important}#admin-modal{display:none!important}</style>');
+    } else {
+      // Sem sessão: limpa qualquer resíduo e garante login visível
+      localStorage.removeItem('gcm_session_user');
+      localStorage.removeItem('gcm_session_role');
+      document.write('<style>#login-screen{display:flex!important}#admin-modal{display:none!important}#user-info{display:none!important}</style>');
+    }
+  })();
 </script>
 </head>
 <body>
@@ -867,8 +874,18 @@ window.addEventListener('DOMContentLoaded', () => {
   const u = localStorage.getItem('gcm_session_user');
   const role = localStorage.getItem('gcm_session_role');
   if (u) {
-    document.getElementById('login-screen').style.display = 'none';
-    showUserBar(u, role);
+    // Valida se o usuário ainda existe e o role bate
+    const users = loadUsers();
+    const found = users.find(x => x.u === u);
+    if (found && found.role === role) {
+      document.getElementById('login-screen').style.display = 'none';
+      showUserBar(u, found.role);
+    } else {
+      // Sessão inválida ou role alterado — força novo login
+      localStorage.removeItem('gcm_session_user');
+      localStorage.removeItem('gcm_session_role');
+      document.getElementById('login-screen').style.display = 'flex';
+    }
   }
   document.getElementById('login-pass').addEventListener('keydown', e => {
     if (e.key === 'Enter') doLogin();
