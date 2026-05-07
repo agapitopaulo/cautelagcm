@@ -173,6 +173,14 @@
   select.admin-input{cursor:pointer;}
 
 </style>
+<script>
+  if (localStorage.getItem('gcm_session_user')) {
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('login-screen').style.display = 'none';
+    });
+    document.write('<style>#login-screen{display:none!important}</style>');
+  }
+</script>
 </head>
 <body>
 
