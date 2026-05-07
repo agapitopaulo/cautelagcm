@@ -788,8 +788,8 @@ async function doLogin() {
   const users = loadUsers();
   const found = users.find(x => x.u === u && x.h === h);
   if (found) {
-    sessionStorage.setItem('gcm_user', u);
-    sessionStorage.setItem('gcm_role', found.role);
+    localStorage.setItem('gcm_session_user', u);
+    localStorage.setItem('gcm_session_role', found.role);
     document.getElementById('login-screen').style.display = 'none';
     showUserBar(u, found.role);
   } else {
@@ -804,7 +804,8 @@ function showUserBar(u, role) {
 }
 
 function doLogout() {
-  sessionStorage.clear();
+  localStorage.removeItem('gcm_session_user');
+  localStorage.removeItem('gcm_session_role');
   location.reload();
 }
 
@@ -820,7 +821,7 @@ function closeAdmin() {
 function renderUsersTable() {
   const users = loadUsers();
   const tbody = document.getElementById('users-tbody');
-  const me = sessionStorage.getItem('gcm_user');
+  const me = localStorage.getItem('gcm_session_user');
   tbody.innerHTML = users.map(u => `
     <tr>
       <td>${u.u}</td>
@@ -888,8 +889,8 @@ function exportHTML() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const u = sessionStorage.getItem('gcm_user');
-  const role = sessionStorage.getItem('gcm_role');
+  const u = localStorage.getItem('gcm_session_user');
+  const role = localStorage.getItem('gcm_session_role');
   if (u) {
     document.getElementById('login-screen').style.display = 'none';
     showUserBar(u, role);
@@ -901,6 +902,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // ========== FIM AUTENTICAÇÃO ==========
 
 </script>
+
 
 
 </body></html>
